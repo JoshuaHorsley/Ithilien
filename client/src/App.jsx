@@ -1,10 +1,16 @@
-function App() {
-  return(
-    <div>
-      <h1>Ithilien</h1>
-    </div>
-  )
+import { Routes, Route } from 'react-router-dom'
+import LandingPage from './pages/landingpage'
+import AppNavbar from './Components/Navbar'
 
+function App() {
+  return (
+    <>
+      <AppNavbar />
+      <Routes>
+        <Route path="/" element={<LandingPage/>} />
+      </Routes>
+    </>
+  )
 }
 
 export default App

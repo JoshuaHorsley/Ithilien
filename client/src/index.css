@@ -5,7 +5,8 @@
   --color-bg-hover: #f0f7f0;
   --color-primary: #2e7d32;
   --color-primary-hover: #1b5e20;
-  --color-text-primary: #ffffff;
+  --color-text-primary: #1a1a1a;
+  --color-text-hero: #ffffff;
   --color-text-secondary: #5a5a5a;
   --color-text-light: #ffffff;
   --color-border: #e0e0e0;
@@ -60,6 +61,7 @@ body {
   padding: 40px;
   border-radius: 12px;
   display: inline-block;
+  color: var(--color-text-hero)
 }
 
 .card {
@@ -144,4 +146,59 @@ body {
 
 .password-toggle:hover {
   color: var(--color-primary);
+}
+
+.plant-card .dropdown {
+  position: relative;
+  z-index: 2;
+}
+
+.plant-card:hover {
+  z-index: 3;
+}
+
+.add-plant-card {
+  border: 2px dashed var(--color-border);
+  border-radius: 12px;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  cursor: pointer;
+  min-height: 230px;
+  transition: all 0.25s ease;
+}
+
+.add-plant-card:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-bg-hover);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(46, 125, 50, 0.15);
+}
+
+.add-plant-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--color-bg-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  color: var(--color-primary);
+}
+
+.add-plant-title {
+  font-family: 'Cinzel', serif;
+  font-size: 17px;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.add-plant-subtitle {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 0;
 }

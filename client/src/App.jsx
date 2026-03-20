@@ -7,6 +7,7 @@ import Authpage from './pages/AuthpPage'
 import MyGarden from './pages/MyGarden'
 
 function App() {
+  // temp to test navbar state
   const [isLoggedIn, setIsLoggedIn] = useState(true)
   
   return (

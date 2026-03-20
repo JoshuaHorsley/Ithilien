@@ -5,7 +5,7 @@
   --color-bg-hover: #f0f7f0;
   --color-primary: #2e7d32;
   --color-primary-hover: #1b5e20;
-  --color-text-primary: #ffffff;
+  --color-text-primary: #1a1a1a;
   --color-text-secondary: #5a5a5a;
   --color-text-light: #ffffff;
   --color-border: #e0e0e0;
@@ -77,15 +77,15 @@ body {
 }
 
 .footer {
-  background-color: var(--color-primary);
+  background-color: #ffffff;
 }
 
 .footer-link {
-  color: #ffffff;
+  color: var(--color-text-secondary);
   text-decoration: none;
   font-size: 0.9rem;
 }
 
 .footer-link:hover {
-  color: #c8e6c9;
+  color: var(--color-primary);
 }

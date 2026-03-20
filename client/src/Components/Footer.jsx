@@ -10,7 +10,7 @@ export default function Footer() {
           <Link to="/login" className="footer-link me-3">Login</Link>
           <Link to="/register" className="footer-link">Register</Link>
         </p>
-        <p className="mb-0" style={{ fontSize: '0.85rem', color: '#ffffff' }}>
+        <p className="text-muted mb-0" style={{ fontSize: '0.85rem' }}>
           &copy; {new Date().getFullYear()} Ithilien. All rights reserved.
         </p>
       </Container>

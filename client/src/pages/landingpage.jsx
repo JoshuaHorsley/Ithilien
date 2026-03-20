@@ -14,9 +14,9 @@ function LandingPage() {
             >
                 <Container>
                 <div className='hero-content'>
-                    <h1 className="hero-title">All things will grow with joy</h1>
+                    <h1 className="hero-title">All Things Will Grow With Joy</h1>
                     <p className="hero-subtitle">
-                        Your personal plant care companion. Track watering schedules, get reminders
+                        Ithilien is your personal plant care companion. Track watering schedules, get reminders
                         and keep your plants thriving.
                     </p>
                     <Button as={Link} to="/register" variant="success" size="lg" className="mt-3">

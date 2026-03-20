@@ -5,7 +5,7 @@
   --color-bg-hover: #f0f7f0;
   --color-primary: #2e7d32;
   --color-primary-hover: #1b5e20;
-  --color-text-primary: #1a1a1a;
+  --color-text-primary: #ffffff;
   --color-text-secondary: #5a5a5a;
   --color-text-light: #ffffff;
   --color-border: #e0e0e0;
@@ -87,5 +87,61 @@ body {
 }
 
 .footer-link:hover {
+  color: var(--color-primary);
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+}
+
+.nav-tabs .nav-link {
+  color: var(--color-text-secondary);
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-primary);
+}
+
+.auth-page {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+
+.auth-card {
+  box-shadow: none;
+}
+
+.auth-card:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.auth-link {
+  text-decoration: none;
+  color: var(--color-primary);
+  transition: text-decoration 0.2s ease;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+  color: var(--color-primary-hover);
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+}
+
+.password-toggle:hover {
   color: var(--color-primary);
 }

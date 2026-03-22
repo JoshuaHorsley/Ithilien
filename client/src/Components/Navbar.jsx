@@ -1,9 +1,18 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Navbar, Nav, Container } from 'react-bootstrap'
+import { Navbar, Nav, Container, Dropdown } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import { authClient } from '../lib/auth'
+import { BsPersonCircle } from 'react-icons/bs'
 import leafLogo from '../assets/leaf-logo.svg'
 
-export default function AppNavbar({ isLoggedIn }) {
+export default function AppNavbar({ isLoggedIn, session }) {
     const location = useLocation()
+    const navigate = useNavigate()
+
+    const handleLogout = async () => {
+        await authClient.signOut()
+        navigate('/')
+    }
 
     return (
         <Navbar bg='white' expand='lg' className='border-bottom py-1'>
@@ -23,9 +32,17 @@ export default function AppNavbar({ isLoggedIn }) {
                                 <Nav.Link as={Link} to='/calendar' active={location.pathname === '/calendar'}>
                                     Calendar
                                 </Nav.Link>
-                                <Nav.Link as={Link} to='/settings' active={location.pathname === '/settings'}>
-                                    Settings
-                                </Nav.Link>
+                                <Dropdown align='end'>
+                                    <Dropdown.Toggle variant='link' className='nav-avatar-toggle'>
+                                        <BsPersonCircle size={24} />
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Header>{session?.user?.email}</Dropdown.Header>
+                                        <Dropdown.Divider />
+                                        <Dropdown.Item as={Link} to='/settings'>Settings</Dropdown.Item>
+                                        <Dropdown.Item className='text-danger' onClick={handleLogout}>Logout</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
                             </>
                         ) : (
                             <>

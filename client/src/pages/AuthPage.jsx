@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { BsEye, BsEyeSlash } from 'react-icons/bs'
 import { Container, Card, Tab, Nav, Form, Button } from 'react-bootstrap'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { authClient } from '../lib/auth'
 import authBg from '../assets/AuthBg.jpeg'
 
 export default function Authpage(){
     const location = useLocation()
+    const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState(location.pathname === '/register' ? 'register' : 'login')
     const [showPassword, setShowPassword] = useState(false)
     const [email, setEmail] = useState('')
@@ -21,28 +23,40 @@ export default function Authpage(){
         setConfirmPassword('')
     }, [location.pathname])
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault()
         const newErrors = {}
 
         if (!email) newErrors.email = 'Email is required'
         if (!password) newErrors.password = 'Password is required'
-        
 
         setErrors(newErrors)
         if (Object.keys(newErrors).length > 0) return
 
-        // TODO: send login request to backend
+        try {
+            const result = await authClient.signIn.email({
+                email,
+                password,
+            })
+            if (result.error) {
+                setErrors({ email: result.error.message })
+            } else {
+                navigate('/garden')
+                console.log('Login successful!', result)
+            }
+        } catch (err) {
+            setErrors({ email: 'Something went wrong. Please try again.' })
+        }
     }
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault()
         const newErrors = {}
 
         if (!email) newErrors.email = 'Email is required'
         if (!password) newErrors.password = 'Password is required'
-        if (!confirmPassword) newErrors.confirmPassword = 'Please confirm your password'
         else if (password.length < 6) newErrors.password = 'Password must be at least 6 characters'
+        if (!confirmPassword) newErrors.confirmPassword = 'Please confirm your password'
         if (password && confirmPassword && password !== confirmPassword) {
             newErrors.confirmPassword = 'Passwords do not match'
         }
@@ -50,7 +64,21 @@ export default function Authpage(){
         setErrors(newErrors)
         if (Object.keys(newErrors).length > 0) return
 
-        // TODO: send register request to backend
+        try {
+            const result = await authClient.signUp.email({
+                email,
+                password,
+                name: '',
+            })
+            if (result.error) {
+                setErrors({ email: result.error.message })
+            } else {
+                navigate('/garden')
+                console.log('Registration successful!', result)
+            }
+        } catch (err) {
+            setErrors({ email: 'Something went wrong. Please try again.' })
+        }
     }
     
     return (

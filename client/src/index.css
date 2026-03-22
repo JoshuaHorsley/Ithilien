@@ -222,3 +222,17 @@ body {
   color: var(--color-text-secondary);
   margin: 0;
 }
+
+.nav-avatar-toggle {
+  color: var(--color-primary) !important;
+  padding: 4px 8px;
+  text-decoration: none;
+}
+
+.nav-avatar-toggle::after {
+  display: none;
+}
+
+.nav-avatar-toggle:hover {
+  color: var(--color-primary-hover) !important;
+}

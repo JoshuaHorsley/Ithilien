@@ -9,16 +9,17 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  password  String
-  timezone  String   @default("America/Toronto")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  plants    Plant[]
-  sessions  Session[]
-  accounts  Account[]
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  name          String?
+  password      String?
+  timezone      String    @default("America/Toronto")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  plants        Plant[]
+  sessions      Session[]
+  accounts      Account[]
 }
 
 model Plant {

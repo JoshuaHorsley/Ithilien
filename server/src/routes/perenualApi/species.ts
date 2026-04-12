@@ -1,10 +1,13 @@
-const express = require('express')
-const router = express.Router()
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
+import express, { Router } from 'express'
+import { PrismaClient } from '@prisma/client'
+import type { Request, Response } from 'express'
+
+const prisma = new PrismaClient();
+const router = Router();
+const TREFLE_API_TOKEN = process.env.TREFLE_API_TOKEN;
 
 // Convert Trefle's 0-10 light scale to a human-friendly label
-function mapLight(value) {
+function mapLight(value: number): string | null {
   if (value === null || value === undefined) return null
   if (value <= 3) return 'Low light'
   if (value <= 6) return 'Bright indirect'
@@ -12,7 +15,7 @@ function mapLight(value) {
 }
 
 // Convert Trefle's 0-10 humidity scale to a label
-function mapHumidity(value) {
+function mapHumidity(value: number): string | null {
   if (value === null || value === undefined) return null
   if (value <= 3) return 'Low'
   if (value <= 6) return 'Medium'
@@ -20,26 +23,30 @@ function mapHumidity(value) {
 }
 
 // Convert precipitation data into a simple watering frequency
-function mapWatering(minPrecip, maxPrecip) {
+function mapWatering(minPrecip: number, maxPrecip: number): string | null {
   if (!minPrecip && !maxPrecip) return null
-  const avg = ((minPrecip?.mm || 0) + (maxPrecip?.mm || 0)) / 2
+  const avg = ((minPrecip || 0) + (maxPrecip || 0)) / 2
   if (avg <= 500) return 'Infrequent (drought-tolerant)'
   if (avg <= 1000) return 'Average (weekly)'
   return 'Frequent (keep moist)'
 }
 
+
+
 // Species search - calls Trefle API
 // Example: GET /api/species/search?q=monstera
-router.get('/search', async (req, res) => {
-  const { q } = req.query
+router.get('/search', async (req: Request, res: Response) => {
+  const { q } = req.query as { q: string }
 
+
+  //Empty response if no query string
   if (!q || q.trim().length === 0) {
     return res.json({ data: [] })
   }
 
   try {
     const response = await fetch(
-      `https://trefle.io/api/v1/plants/search?token=${process.env.TREFLE_API_TOKEN}&q=${encodeURIComponent(q)}`
+      `https://trefle.io/api/v1/plants/search?token=${TREFLE_API_TOKEN}&q=${encodeURIComponent(q)}`
     )
 
     const json = await response.json()

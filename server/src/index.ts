@@ -1,9 +1,10 @@
-const express = require('express')
-const cors = require('cors')
-const dotenv = require('dotenv')
-const { toNodeHandler } = require('better-auth/node')
-const { auth } = require('./lib/auth')
-const { PrismaClient } = require('@prisma/client')
+import express from 'express'
+import dotenv from 'dotenv'
+import { toNodeHandler } from 'better-auth/node'
+import { auth } from './lib/auth.js'
+import { PrismaClient } from '@prisma/client'
+import cors from 'cors'
+import speciesRoutes from './routes/perenualApi/species.js'
 
 dotenv.config()
 
@@ -19,7 +20,6 @@ app.use(cors({
 app.use(express.json())
 
 // Species routes (Trefle API)
-const speciesRoutes = require('./species')
 app.use('/api/species', speciesRoutes)
 
 // Auth routes (better-auth)

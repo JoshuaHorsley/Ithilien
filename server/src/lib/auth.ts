@@ -1,6 +1,9 @@
-const { betterAuth } = require('better-auth')
-const { prismaAdapter } = require('better-auth/adapters/prisma')
-const { PrismaClient } = require('@prisma/client')
+import { betterAuth } from 'better-auth'
+import { prismaAdapter } from 'better-auth/adapters/prisma'
+import { PrismaClient } from '@prisma/client'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const prisma = new PrismaClient()
 
@@ -16,4 +19,4 @@ const auth = betterAuth({
   trustedOrigins: ['http://localhost:5173'],
 })
 
-module.exports = { auth, prisma }
+export { auth, prisma }

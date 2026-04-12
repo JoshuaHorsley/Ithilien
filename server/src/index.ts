@@ -1,13 +1,19 @@
 import express from 'express'
-import dotenv from 'dotenv'
-import { toNodeHandler } from 'better-auth/node'
+import type { Request, Response } from 'express'
+
 import { auth } from './lib/auth.js'
+import { toNodeHandler } from 'better-auth/node'
 import { PrismaClient } from '@prisma/client'
+
+import dotenv from 'dotenv'
 import cors from 'cors'
-import speciesRoutes from './routes/perenualApi/species.js'
+
+import { router as speciesRouter } from './routes/perenualApi/species.js'
+import { router as plantsRouter } from './routes/plants/plants.js'
+import { router as plantsByIdRouter } from './routes/plants/plantsById.js'
+
 
 dotenv.config()
-
 const prisma = new PrismaClient()
 const app = express()
 const PORT = process.env.PORT || 3003
@@ -19,19 +25,21 @@ app.use(cors({
 
 app.use(express.json())
 
-// Species routes (Trefle API)
-app.use('/api/species', speciesRoutes)
-
-// Auth routes (better-auth)
-app.all('/api/auth/{*splat}', toNodeHandler(auth))
-
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok' })
 })
 
+//Automatically-handled BetterAuth routes
+app.all('/api/auth/{*splat}', toNodeHandler(auth))
+
+//Imported API Routers
+app.use('/api/species', speciesRouter)
+app.use('/api/plants', plantsRouter)
+app.use('/api/plants', plantsByIdRouter)
+
 // Get all plants for a user
-app.get('/api/plants', async (req, res) => {
+app.get('/api/plants', async (req: Request, res: Response) => {
   const { userId } = req.query
   if (!userId) return res.status(400).json({ error: 'userId is required' })
 

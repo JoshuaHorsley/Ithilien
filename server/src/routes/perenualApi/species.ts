@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 import type { Request, Response } from 'express'
 
 const prisma = new PrismaClient();
-const router = Router();
+export const router = Router();
 const TREFLE_API_TOKEN = process.env.TREFLE_API_TOKEN;
 
 // Convert Trefle's 0-10 light scale to a human-friendly label
@@ -168,5 +168,3 @@ router.post('/add', async (req, res) => {
     res.status(500).json({ error: 'Failed to add plant' })
   }
 })
-
-module.exports = router

@@ -23,6 +23,15 @@ export default function Calendar() {
                 <Col className='border p-3'>6</Col>
                 <Col className='border p-3'>7</Col>
             </Row>
+            <Row className='text-center mb-2'>
+                <Col className='border p-3'>8</Col>
+                <Col className='border p-3'>9</Col>
+                <Col className='border p-3'>10</Col>
+                <Col className='border p-3'>11</Col>
+                <Col className='border p-3'>12</Col>
+                <Col className='border p-3'>13</Col>
+                <Col className='border p-3'>14</Col>
+            </Row>
         </Container>
     )
 }

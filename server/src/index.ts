@@ -8,9 +8,11 @@ import { PrismaClient } from '@prisma/client'
 import dotenv from 'dotenv'
 import cors from 'cors'
 
-import { router as speciesRouter } from './routes/perenualApi/species.js'
+import { router as speciesRouter } from './routes/trefleApi/species.js'
 import { router as plantsRouter } from './routes/plants/plants.js'
-import { router as plantsByIdRouter } from './routes/plants/plantsById.js'
+import { router as calendarRouter } from './routes/calendar.js'
+import { router as remindersRouter } from './routes/reminders.js'
+import { router as userRouter } from './routes/user.js'
 
 
 dotenv.config()
@@ -36,7 +38,10 @@ app.all('/api/auth/{*splat}', toNodeHandler(auth))
 //Imported API Routers
 app.use('/api/species', speciesRouter)
 app.use('/api/plants', plantsRouter)
-app.use('/api/plants', plantsByIdRouter)
+app.use('/api/calendar', calendarRouter)
+app.use('/api/reminders', remindersRouter)
+app.use('/api/user', userRouter)
+
 
 // Get all plants for a user
 app.get('/api/plants', async (req: Request, res: Response) => {
@@ -45,7 +50,7 @@ app.get('/api/plants', async (req: Request, res: Response) => {
 
   try {
     const plants = await prisma.plant.findMany({
-      where: { userId },
+      where: { userId: userId as string },
       orderBy: { createdAt: 'desc' },
     })
     res.json({ data: plants })

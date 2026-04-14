@@ -5,7 +5,7 @@ export default function Calendar() {
         <Container className='py-4'>
             <h1 className='mb-4'>Watering Schedule</h1>
 
-            <Row>
+            <Row className='text-center fw-bold mb-2'>
                 <Col>Sun</Col>
                 <Col>Mon</Col>
                 <Col>Tue</Col>

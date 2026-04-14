@@ -31,53 +31,53 @@ export default function Calendar() {
             </Row>
 
             <Row className='text-center mb-2'>
-                <Col className='border p-3'>1</Col>
-                <Col className='border p-3'>2</Col>
-                <Col className='border p-3'>3</Col>
-                <Col className='border p-3'>4</Col>
-                <Col className='border p-3'>5</Col>
-                <Col className='border p-3'>6</Col>
-                <Col className='border p-3'>7</Col>
+                <Col className='calendar-cell'>1</Col>
+                <Col className='calendar-cell'>2</Col>
+                <Col className='calendar-cell'>3</Col>
+                <Col className='calendar-cell'>4</Col>
+                <Col className='calendar-cell'>5</Col>
+                <Col className='calendar-cell'>6</Col>
+                <Col className='calendar-cell'>7</Col>
             </Row>
 
             <Row className='text-center mb-2'>
-                <Col className='border p-3'>8</Col>
-                <Col className='border p-3'>9</Col>
-                <Col className='border p-3'>10</Col>
-                <Col className='border p-3'>11</Col>
-                <Col className='border p-3'>12</Col>
-                <Col className='border p-3'>13</Col>
-                <Col className='border p-3'>14</Col>
+                <Col className='calendar-cell'>8</Col>
+                <Col className='calendar-cell'>9</Col>
+                <Col className='calendar-cell'>10</Col>
+                <Col className='calendar-cell'>11</Col>
+                <Col className='calendar-cell'>12</Col>
+                <Col className='calendar-cell'>13</Col>
+                <Col className='calendar-cell'>14</Col>
             </Row>
 
             <Row className='text-center mb-2'>
-                <Col className='border p-3'>15</Col>
-                <Col className='border p-3'>16</Col>
-                <Col className='border p-3'>17</Col>
-                <Col className='border p-3'>18</Col>
-                <Col className='border p-3'>19</Col>
-                <Col className='border p-3'>20</Col>
-                <Col className='border p-3'>21</Col>
+                <Col className='calendar-cell'>15</Col>
+                <Col className='calendar-cell'>16</Col>
+                <Col className='calendar-cell'>17</Col>
+                <Col className='calendar-cell'>18</Col>
+                <Col className='calendar-cell'>19</Col>
+                <Col className='calendar-cell'>20</Col>
+                <Col className='calendar-cell'>21</Col>
             </Row>
 
             <Row className='text-center mb-2'>
-                <Col className='border p-3'>22</Col>
-                <Col className='border p-3'>23</Col>
-                <Col className='border p-3'>24</Col>
-                <Col className='border p-3'>25</Col>
-                <Col className='border p-3'>26</Col>
-                <Col className='border p-3'>27</Col>
-                <Col className='border p-3'>28</Col>
+                <Col className='calendar-cell'>22</Col>
+                <Col className='calendar-cell'>23</Col>
+                <Col className='calendar-cell'>24</Col>
+                <Col className='calendar-cell'>25</Col>
+                <Col className='calendar-cell'>26</Col>
+                <Col className='calendar-cell'>27</Col>
+                <Col className='calendar-cell'>28</Col>
             </Row>
 
             <Row className='text-center mb-2'>
-                <Col className='border p-3'>29</Col>
-                <Col className='border p-3'>30</Col>
-                <Col className='border p-3'>31</Col>
-                <Col className='border p-3'></Col>
-                <Col className='border p-3'></Col>
-                <Col className='border p-3'></Col>
-                <Col className='border p-3'></Col>
+                <Col className='calendar-cell'>29</Col>
+                <Col className='calendar-cell'>30</Col>
+                <Col className='calendar-cell'>31</Col>
+                <Col className='calendar-cell'></Col>
+                <Col className='calendar-cell'></Col>
+                <Col className='calendar-cell'></Col>
+                <Col className='calendar-cell'></Col>
             </Row>
         </Container>
     )

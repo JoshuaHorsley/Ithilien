@@ -8,11 +8,11 @@ export const router = Router()
 // Get all plants for a user
 router.get('/', async (req: Request, res: Response) => {
   const { userId } = req.query
-  if (!userId) return res.status(400).json({ error: 'userId is required' })
+  if (typeof userId !== 'string') return res.status(400).json({ error: 'userId is required' })
 
   try {
     const plants = await prisma.plant.findMany({
-      where: { userId: userId as string },
+      where: { userId },
       orderBy: { createdAt: 'desc' },
     })
     res.json({ data: plants })
@@ -25,6 +25,7 @@ router.get('/', async (req: Request, res: Response) => {
 // Get a single plant by ID (with care logs)
 router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params
+  if (typeof id !== 'string') return res.status(400).json({ error: 'Invalid plant id' })
 
   try {
     const plant = await prisma.plant.findUnique({
@@ -45,6 +46,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 // Mark a plant as watered
 router.post('/:id/water', async (req: Request, res: Response) => {
   const { id } = req.params
+  if (typeof id !== 'string') return res.status(400).json({ error: 'Invalid plant id' })
 
   try {
     const now = new Date()
@@ -68,6 +70,8 @@ router.post('/:id/water', async (req: Request, res: Response) => {
 // Care history log for a plant
 router.get('/:id/history', async (req: Request, res: Response) => {
   const { id } = req.params
+  if (typeof id !== 'string') return res.status(400).json({ error: 'Invalid plant id' })
+
   try {
     const logs = await prisma.careLog.findMany({
       where: { plantId: id },
@@ -84,9 +88,10 @@ router.get('/:id/history', async (req: Request, res: Response) => {
 router.put('/:id', async (req: Request, res: Response) => {
   const { id } = req.params
   const { nickname, wateringDays, imageUrl } = req.body
+  if (typeof id !== 'string') return res.status(400).json({ error: 'Invalid plant id' })
 
   try {
-    const updateData: { nickname?: string; wateringDays?: number; imageUrl?: string } = {}
+    const updateData: { nickname?: string; wateringDays?: number | null; imageUrl?: string | null } = {}
     if (nickname !== undefined) updateData.nickname = nickname
     if (wateringDays !== undefined) updateData.wateringDays = wateringDays
     if (imageUrl !== undefined) updateData.imageUrl = imageUrl
@@ -106,6 +111,8 @@ router.put('/:id', async (req: Request, res: Response) => {
 // Delete a plant
 router.delete('/:id', async (req: Request, res: Response) => {
   const { id } = req.params
+  if (typeof id !== 'string') return res.status(400).json({ error: 'Invalid plant id' })
+
   try {
     await prisma.careLog.deleteMany({ where: { plantId: id } })
     await prisma.plant.delete({ where: { id } })

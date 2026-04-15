@@ -127,10 +127,10 @@ export default function PlantProfile() {
 
           <section className="pp-section">
             <h5>Care Requirements</h5>
-            <div className="pp-req-row"><span>Watering</span><span>{plant.wateringDays ? `Every ${plant.wateringDays} days` : plant.watering || '—'}</span></div>
-            <div className="pp-req-row"><span>Sunlight</span><span>{plant.light || '—'}</span></div>
-            <div className="pp-req-row"><span>Humidity</span><span>{plant.humidity || '—'}</span></div>
-            <div className="pp-req-row"><span>Growth Rate</span><span>{plant.growthRate || '—'}</span></div>
+            <div className="pp-req-row"><span>Watering</span><span>{plant.wateringDays ? `Every ${plant.wateringDays} days` : plant.watering || 'Not available'}</span></div>
+            <div className="pp-req-row"><span>Sunlight</span><span>{plant.light || 'Not available'}</span></div>
+            <div className="pp-req-row"><span>Humidity</span><span>{plant.humidity || 'Not available'}</span></div>
+            <div className="pp-req-row"><span>Growth Rate</span><span>{plant.growthRate || 'Not available'}</span></div>
           </section>
 
           <section className="pp-section">

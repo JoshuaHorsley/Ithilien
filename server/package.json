@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "generate": "prisma generate",
+    "start": "npm run generate && tsx src/index.ts",
+    "dev": "npm run generate && tsx watch src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@prisma/client": "^6.19.2",
     "better-auth": "^1.5.5",
@@ -17,5 +20,12 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "prisma": "^6.12.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
   }
 }

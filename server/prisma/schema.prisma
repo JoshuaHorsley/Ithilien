@@ -23,18 +23,31 @@ model User {
 }
 
 model Plant {
-  id          String   @id @default(cuid())
-  nickname    String
-  speciesName String?
-  speciesData Json?
-  imageUrl    String?
-  lastWatered DateTime?
+  id           String   @id @default(cuid())
+  nickname     String
+  speciesName  String?
+  imageUrl     String?
+  lastWatered  DateTime?
   wateringDays Int?
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  careLogs  CareLog[]
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  careLogs     CareLog[]
+
+  // Species data (from Trefle API)
+  trefleId     Int?
+  slug         String?
+  commonName   String?
+  family       String?
+  light        String?
+  humidity     String?
+  watering     String?
+  growthRate   String?
+  toxicity     String?
+  edible       Boolean  @default(false)
+  flowerColor  Json     @default("[]")
+  foliageColor Json     @default("[]")
 }
 
 model CareLog {

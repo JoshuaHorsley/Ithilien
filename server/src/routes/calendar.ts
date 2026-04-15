@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import type { Request, Response } from 'express'
+import { PrismaClient } from '@prisma/client'
 
+const prisma = new PrismaClient()
 export const router = Router()
 
 router.get('/', async (req: Request, res: Response) => {
@@ -27,11 +29,34 @@ router.get('/', async (req: Request, res: Response) => {
   }
 
   try {
+    const plants = await prisma.plant.findMany({
+      where: {
+        userId,
+        wateringDays: {
+          not: null,
+        },
+      },
+      include: {
+        careLogs: {
+          where: {
+            action: 'Watered',
+          },
+          orderBy: {
+            date: 'asc',
+          },
+        },
+      },
+      orderBy: {
+        nickname: 'asc',
+      },
+    })
+
     res.json({
       data: {
         userId,
         year: parsedYear,
         month: parsedMonth,
+        plants,
         events: [],
       },
     })

@@ -1,0 +1,122 @@
+.plant-profile {
+  max-width: 720px;
+}
+
+.pp-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(46, 125, 50, 0.12);
+  overflow: hidden;
+}
+
+.pp-image-wrap {
+  width: 100%;
+  height: 320px;
+  background: #f0f7f0;
+  overflow: hidden;
+}
+
+.pp-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pp-nickname {
+  font-family: 'Cinzel', serif;
+  color: #2e7d32;
+  margin-bottom: 0.25rem;
+}
+
+.pp-species {
+  color: #6c757d;
+  font-style: italic;
+  margin-bottom: 1.25rem;
+}
+
+.pp-water-btn {
+  background: #81c784;
+  border: none;
+  font-weight: 600;
+  padding: 0.65rem;
+  border-radius: 10px;
+}
+
+.pp-water-btn:hover,
+.pp-water-btn:focus {
+  background: #66bb6a;
+}
+
+.pp-section {
+  margin-top: 1.75rem;
+  padding: 1rem 1.25rem;
+  background: #fafcfa;
+  border: 1px solid #e8efe8;
+  border-radius: 12px;
+}
+
+.pp-section h5 {
+  color: #2e7d32;
+  margin-bottom: 0.85rem;
+  font-weight: 600;
+}
+
+.pp-req-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  border-bottom: 1px dashed #e0e7e0;
+}
+
+.pp-req-row:last-child {
+  border-bottom: none;
+}
+
+.pp-req-row span:first-child {
+  color: #555;
+}
+
+.pp-req-row span:last-child {
+  font-weight: 500;
+  color: #2e3a2e;
+}
+
+.pp-status {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.pp-status.ok {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+}
+
+.pp-status.overdue {
+  background: #fdecea;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+}
+
+.pp-history {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pp-history li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eef3ee;
+}
+
+.pp-history li:last-child {
+  border-bottom: none;
+}
+
+.pp-history-date {
+  color: #6c757d;
+  font-variant-numeric: tabular-nums;
+}

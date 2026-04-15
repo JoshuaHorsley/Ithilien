@@ -43,23 +43,6 @@ app.use('/api/reminders', remindersRouter)
 app.use('/api/user', userRouter)
 
 
-// Get all plants for a user
-app.get('/api/plants', async (req: Request, res: Response) => {
-  const { userId } = req.query
-  if (!userId) return res.status(400).json({ error: 'userId is required' })
-
-  try {
-    const plants = await prisma.plant.findMany({
-      where: { userId: userId as string },
-      orderBy: { createdAt: 'desc' },
-    })
-    res.json({ data: plants })
-  } catch (error) {
-    console.error('Fetch plants error:', error)
-    res.status(500).json({ error: 'Failed to fetch plants' })
-  }
-})
-
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
 })

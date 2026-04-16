@@ -5,6 +5,24 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 export const router = Router()
 
+function addDays(date: Date, days: number): Date {
+  const result = new Date(date)
+  result.setDate(result.getDate() + days)
+  return result
+}
+
+function startOfMonth(year: number, month: number): Date {
+  return new Date(year, month - 1, 1, 0, 0, 0, 0)
+}
+
+function endOfMonth(year: number, month: number): Date {
+  return new Date(year, month, 0, 23, 59, 59, 999)
+}
+
+function isSameOrBefore(a: Date, b: Date): boolean {
+  return a.getTime() <= b.getTime()
+}
+
 router.get('/', async (req: Request, res: Response) => {
   const { userId, year, month } = req.query
 
@@ -51,13 +69,46 @@ router.get('/', async (req: Request, res: Response) => {
       },
     })
 
+    const monthStart = startOfMonth(parsedYear, parsedMonth)
+    const monthEnd = endOfMonth(parsedYear, parsedMonth)
+    const events = []
+
+    for (const plant of plants) {
+      if (!plant.wateringDays || plant.wateringDays < 1) continue
+
+      const interval = plant.wateringDays
+      const seedDate = plant.lastWatered ?? plant.createdAt
+
+      let dueDate = addDays(new Date(seedDate), interval)
+
+      while (dueDate < monthStart) {
+        dueDate = addDays(dueDate, interval)
+      }
+
+      while (isSameOrBefore(dueDate, monthEnd)) {
+        const nextDueDate = addDays(dueDate, interval)
+
+        events.push({
+          plantId: plant.id,
+          nickname: plant.nickname,
+          speciesName: plant.speciesName,
+          imageUrl: plant.imageUrl,
+          dueDate,
+          nextDueDate,
+          wateringDays: plant.wateringDays,
+          careLogs: plant.careLogs,
+        })
+
+        dueDate = nextDueDate
+      }
+    }
+
     res.json({
       data: {
         userId,
         year: parsedYear,
         month: parsedMonth,
-        plants,
-        events: [],
+        events,
       },
     })
   } catch (error) {

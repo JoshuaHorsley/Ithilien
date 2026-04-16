@@ -88,15 +88,28 @@ router.get('/', async (req: Request, res: Response) => {
       while (isSameOrBefore(dueDate, monthEnd)) {
         const nextDueDate = addDays(dueDate, interval)
 
+        const completedLog = plant.careLogs.find((log) => {
+          const logDate = new Date(log.date)
+          return logDate >= dueDate && logDate < nextDueDate
+        })
+
+        let status: 'upcoming' | 'completed' | 'overdue' = 'upcoming'
+
+        if (completedLog) {
+          status = 'completed'
+        } else if (dueDate < now) {
+          status = 'overdue'
+        }
+
         events.push({
           plantId: plant.id,
           nickname: plant.nickname,
           speciesName: plant.speciesName,
           imageUrl: plant.imageUrl,
           dueDate,
-          nextDueDate,
+          status,
           wateringDays: plant.wateringDays,
-          careLogs: plant.careLogs,
+          completedAt: completedLog ? completedLog.date : null,
         })
 
         dueDate = nextDueDate

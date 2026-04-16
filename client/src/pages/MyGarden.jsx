@@ -45,6 +45,7 @@ export default function MyGarden() {
               nickname: plant.nickname,
               species: plant.speciesName,
               image: plant.imageUrl || 'https://placehold.co/400x300/f0f7f0/2e7d32?text=No+Photo',
+              daysUntilWatering: plant.daysUntilWatering,
             }} />
           </Col>
         ))}

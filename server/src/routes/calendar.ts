@@ -116,9 +116,12 @@ router.get('/', async (req: Request, res: Response) => {
       }
     }
 
+    events.sort((a, b) => {
+      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+    })
+
     res.json({
       data: {
-        userId,
         year: parsedYear,
         month: parsedMonth,
         events,

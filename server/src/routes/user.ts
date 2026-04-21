@@ -250,29 +250,25 @@ router.put('/profile', async (req: Request, res: Response) =>
 
             }
 
-            // Verify the current password is correct before allowing the change
-            const signInResult = await auth.api.signInEmail({
-
-                body: { email: user.email, password: currentPassword },
-                headers: req.headers as any,
-
-            })
-
-            // If the sign-in attempt fails, it means the current password is incorrect, so return a 400 Bad Request response
-            if (!signInResult || (signInResult as any).error)
+            // changePassword verifies currentPassword internally and throws if wrong
+            try
             {
 
+                await auth.api.changePassword({
+
+                    body: { currentPassword, newPassword, revokeOtherSessions: false },
+                    headers: req.headers as any,
+
+                })
+
+            }
+            catch (err)
+            {
+
+                console.error('Change password error:', err)
                 return res.status(400).json({ error: 'Current password is incorrect' })
 
             }
-
-            // Use better-auth to update the password (handles hashing automatically)
-            await auth.api.changePassword({
-
-                body: { currentPassword, newPassword, revokeOtherSessions: false },
-                headers: req.headers as any,
-
-            })
 
         }
 
@@ -379,16 +375,21 @@ router.delete('/account', async (req: Request, res: Response) =>
 
     try {
 
-        // Verify the password before doing any deletion. 
-        const signInResult = await auth.api.signInEmail({
+        // Verify the password via signInEmail. This creates a throwaway session as a side effect,
+        // but it's harmless here because prisma.session.deleteMany below wipes all sessions for
+        // this user anyway. better-auth exposes no standalone password-verify primitive.
+        try
+        {
 
-            body: { email: user.email, password },
-            headers: req.headers as any,
+            await auth.api.signInEmail({
 
-        })
+                body: { email: user.email, password },
+                headers: req.headers as any,
 
-        // If the sign-in attempt fails, it means the password is incorrect, so return a 400 Bad Request response and do not proceed with deletion
-        if (!signInResult || (signInResult as any).error)
+            })
+
+        }
+        catch
         {
 
             return res.status(400).json({ error: 'Incorrect password' })

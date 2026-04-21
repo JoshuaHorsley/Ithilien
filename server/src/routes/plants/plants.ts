@@ -149,7 +149,7 @@ router.post('/', async (req: Request, res: Response) => {
   const user = await getSessionUser(req)
   if (!user) return res.status(401).json({ error: 'Not authenticated' })
 
-  const { nickname, slug } = req.body
+  const { nickname, slug, imageId } = req.body
 
   if (!nickname || !slug) {
     return res.status(400).json({ error: 'nickname and slug are required' })
@@ -184,6 +184,7 @@ router.post('/', async (req: Request, res: Response) => {
         edible: species.edible || false,
         flowerColor: species.flower?.color || [],
         foliageColor: species.foliage?.color || [],
+        plantImageId: imageId || null,
       },
     })
 
@@ -277,7 +278,7 @@ router.put('/:id', async (req: Request, res: Response) => {
   if (!user) return res.status(401).json({ error: 'Not authenticated' })
 
   const id = req.params.id as string
-  const { nickname, wateringDays, imageUrl } = req.body
+  const { nickname, wateringDays, plantImageId } = req.body
   if (typeof id !== 'string') return res.status(400).json({ error: 'Invalid plant id' })
 
   try {
@@ -285,10 +286,10 @@ router.put('/:id', async (req: Request, res: Response) => {
     if (!existing) return res.status(404).json({ error: 'Plant not found' })
     if (existing.userId !== user.id) return res.status(403).json({ error: 'Forbidden' })
 
-    const updateData: { nickname?: string; wateringDays?: number; imageUrl?: string } = {}
+    const updateData: { nickname?: string; wateringDays?: number | null; plantImageId?: string } = {}
     if (nickname !== undefined) updateData.nickname = nickname
     if (wateringDays !== undefined) updateData.wateringDays = wateringDays
-    if (imageUrl !== undefined) updateData.imageUrl = imageUrl
+    if (plantImageId !== undefined) updateData.plantImageId = plantImageId
 
     const plant = await prisma.plant.update({
       where: { id },

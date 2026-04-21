@@ -13,7 +13,7 @@ import { router as plantsRouter } from './routes/plants/plants.js'
 import { router as calendarRouter } from './routes/calendar.js'
 import { router as remindersRouter } from './routes/reminders.js'
 import { router as userRouter } from './routes/user.js'
-
+import { router as imagesRouter } from './routes/images/images.js'
 
 dotenv.config()
 const prisma = new PrismaClient()
@@ -41,7 +41,7 @@ app.use('/api/plants', plantsRouter)
 app.use('/api/calendar', calendarRouter)
 app.use('/api/reminders', remindersRouter)
 app.use('/api/user', userRouter)
-
+app.use('/api/images', imagesRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)

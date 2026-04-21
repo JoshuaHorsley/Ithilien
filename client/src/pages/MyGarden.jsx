@@ -44,7 +44,11 @@ export default function MyGarden() {
               id: plant.id,
               nickname: plant.nickname,
               species: plant.speciesName,
-              image: plant.imageUrl || 'https://placehold.co/400x300/f0f7f0/2e7d32?text=No+Photo',
+              //If the plant has an image, use the image API to get the image.
+              //Otherwise, use the imageUrl from the Trefle API.
+              image: plant.plantImageId
+                ? `http://localhost:3003/api/images/${plant.plantImageId}`
+                : plant.imageUrl || 'https://placehold.co/400x300/f0f7f0/2e7d32?text=No+Photo',
               daysUntilWatering: plant.daysUntilWatering,
             }} />
           </Col>

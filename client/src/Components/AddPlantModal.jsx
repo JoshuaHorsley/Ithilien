@@ -8,6 +8,7 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
   const [results, setResults] = useState([])
   const [selectedPlant, setSelectedPlant] = useState(null)
   const [searching, setSearching] = useState(false)
+  const [imageFile, setImageFile] = useState(null)
 
   const { data: session } = authClient.useSession()
 
@@ -55,6 +56,7 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
     setQuery('')
     setResults([])
     setSelectedPlant(null)
+    setImageFile(null)
     onHide()
   }
 
@@ -63,6 +65,28 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
     if (!selectedPlant || !nickname.trim() || !session?.user?.id) return
 
     try {
+
+      let imageId = null;
+      if(imageFile) {
+        const formData = new FormData();
+        formData.append('image', imageFile);
+        const imgRes = await fetch('http://localhost:3003/api/images', {
+          method: 'POST',
+          credentials: 'include',
+          body: formData,
+        })
+
+        const imgJson = await imgRes.json();
+        if(!imgRes.ok){
+          alert(`Failed to upload image. Please try again.`);
+          return;
+        }
+        imageId = imgJson.imageId;
+      }
+
+
+
+
       const res = await fetch('http://localhost:3003/api/plants', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -70,6 +94,7 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
         body: JSON.stringify({
           nickname: nickname.trim(),
           slug: selectedPlant.slug,
+          imageId: imageId,
         }),
       })
 
@@ -99,7 +124,11 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
         <Form.Group className='mb-3 text-center'>
           <Form.Label className='fw-bold'>Photo</Form.Label>
           <div className='photo-upload-area'>
-            <Form.Control type='file' accept='image/*' />
+            <Form.Control
+              type='file'
+              accept='image/*'
+              onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+            />
           </div>
         </Form.Group>
 

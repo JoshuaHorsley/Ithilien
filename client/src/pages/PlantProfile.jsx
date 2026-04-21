@@ -13,7 +13,7 @@ export default function PlantProfile() {
   const [showEdit, setShowEdit] = useState(false)
   const [editNickname, setEditNickname] = useState('')
   const [editWateringDays, setEditWateringDays] = useState('')
-  const [editImage, setEditImage] = useState('')
+  const [editImageFile, setEditImageFile] = useState(null)
   const [editImagePreview, setEditImagePreview] = useState('')
 
   const load = async () => {
@@ -42,29 +42,47 @@ export default function PlantProfile() {
   const openEdit = () => {
     setEditNickname(plant.nickname || '')
     setEditWateringDays(plant.wateringDays ?? '')
-    setEditImage('')
-    setEditImagePreview(plant.imageUrl || '')
+    setEditImageFile(null)
+    setEditImagePreview(
+      plant.plantImageId
+        ? `${API}/images/${plant.plantImageId}`
+        : plant.imageUrl || ''
+    )
     setShowEdit(true)
   }
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0]
     if (!file) return
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      setEditImage(reader.result)
-      setEditImagePreview(reader.result)
-    }
-    reader.readAsDataURL(file)
+    setEditImageFile(file)
+    setEditImagePreview(URL.createObjectURL(file))
   }
 
   const saveEdit = async () => {
     try {
+      let plantImageId = undefined
+
+      if (editImageFile) {
+        const formData = new FormData()
+        formData.append('image', editImageFile)
+        const imgRes = await fetch(`${API}/images`, {
+          method: 'POST',
+          credentials: 'include',
+          body: formData,
+        })
+        const imgJson = await imgRes.json()
+        if (!imgRes.ok) {
+          alert('Failed to upload image. Please try again.')
+          return
+        }
+        plantImageId = imgJson.imageId
+      }
+
       const body = {
         nickname: editNickname,
         wateringDays: editWateringDays === '' ? null : Number(editWateringDays),
+        ...(plantImageId !== undefined && { plantImageId }),
       }
-      if (editImage) body.imageUrl = editImage
 
       await fetch(`${API}/plants/${id}`, {
         method: 'PUT',
@@ -113,7 +131,11 @@ export default function PlantProfile() {
       <Card className="pp-card">
         <div className="pp-image-wrap">
           <img
-            src={plant.imageUrl || 'https://placehold.co/800x400/f0f7f0/2e7d32?text=No+Photo'}
+            src={
+              plant.plantImageId
+                ? `${API}/images/${plant.plantImageId}`
+                : plant.imageUrl || 'https://placehold.co/800x400/f0f7f0/2e7d32?text=No+Photo'
+            }
             alt={plant.nickname}
           />
         </div>

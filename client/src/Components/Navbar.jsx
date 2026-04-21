@@ -1,3 +1,10 @@
+/*
+ * FILE: PlantCard.jsx
+ * DESCRIPTION: Displays a single plant as a card in the My Garden grid. Shows the
+ *              plant photo, nickname, species, a colour-coded care status badge, and
+ *              quick action buttons.
+ */
+
 import { Link, useLocation } from 'react-router-dom'
 import { Navbar, Nav, Container, Dropdown } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
@@ -5,7 +12,7 @@ import { authClient } from '../lib/auth'
 import { BsPersonCircle } from 'react-icons/bs'
 import leafLogo from '../assets/leaf-logo.svg'
 
-export default function AppNavbar({ isLoggedIn, session }) {
+export default function AppNavbar({ isLoggedIn, session, reminderCount }) {
     const location = useLocation()
     const navigate = useNavigate()
 
@@ -34,7 +41,14 @@ export default function AppNavbar({ isLoggedIn, session }) {
                                 </Nav.Link>
                                 <Dropdown align='end'>
                                     <Dropdown.Toggle variant='link' className='nav-avatar-toggle'>
-                                        <BsPersonCircle size={24} />
+                                        <div style={{ position: 'relative', display: 'inline-block' }}>
+                                            <BsPersonCircle size={24} />
+                                            {reminderCount > 0 && (
+                                                <span className='reminder-badge'>
+                                                    {reminderCount > 99 ? '99+' : reminderCount}
+                                                </span>
+                                            )}
+                                        </div>
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         <Dropdown.Header>{session?.user?.email}</Dropdown.Header>

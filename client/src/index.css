@@ -236,3 +236,49 @@ body {
 .nav-avatar-toggle:hover {
   color: var(--color-primary-hover) !important;
 }
+
+
+/* Settings page */
+
+.settings-page {
+    min-height: calc(100vh - 120px);
+    background-color: #fafafa;
+}
+
+.settings-card {
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: none;
+}
+
+    .settings-card:hover {
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+.settings-section-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: var(--color-bg-hover);
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.settings-save-btn {
+    min-width: 140px;
+}
+
+.settings-switch .form-check-input:checked {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.settings-switch .form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+    border-color: var(--color-primary);
+}

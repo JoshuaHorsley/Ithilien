@@ -63,14 +63,13 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
     if (!selectedPlant || !nickname.trim() || !session?.user?.id) return
 
     try {
-      const res = await fetch('http://localhost:3003/api/species/add', {
+      const res = await fetch('http://localhost:3003/api/plants', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
           nickname: nickname.trim(),
           slug: selectedPlant.slug,
-          userId: session.user.id,
         }),
       })
 

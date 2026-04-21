@@ -14,7 +14,7 @@ export default function MyGarden() {
   const fetchPlants = async () => {
     if (!session?.user?.id) return
     try {
-      const res = await fetch(`http://localhost:3003/api/plants?userId=${session.user.id}`, {
+      const res = await fetch(`http://localhost:3003/api/plants`, {
         credentials: 'include',
       })
       const json = await res.json()
@@ -45,6 +45,7 @@ export default function MyGarden() {
               nickname: plant.nickname,
               species: plant.speciesName,
               image: plant.imageUrl || 'https://placehold.co/400x300/f0f7f0/2e7d32?text=No+Photo',
+              daysUntilWatering: plant.daysUntilWatering,
             }} />
           </Col>
         ))}

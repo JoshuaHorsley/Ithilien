@@ -27,7 +27,9 @@ export default function Calendar() {
                 <div className='calendar-month-nav'>
                     <Button variant='light' className='calendar-nav-btn'>{'<'}</Button>
                     <h4 className='calendar-month mb-0'>
-                        {calendarData ? `${calendarData.data.month}/${calendarData.data.year}` : 'Loading...'}
+                        {calendarData
+                            ? `${new Date(calendarData.data.year, calendarData.data.month - 1).toLocaleString('en-US', { month: 'long' })} ${calendarData.data.year}`
+                            : 'Loading...'}
                     </h4>
                     <Button variant='light' className='calendar-nav-btn'>{'>'}</Button>
                 </div>

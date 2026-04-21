@@ -15,5 +15,8 @@
   "workspaces": [
     "client",
     "server"
-  ]
+  ],
+  "devDependencies": {
+    "@types/express": "^5.0.6"
+  }
 }

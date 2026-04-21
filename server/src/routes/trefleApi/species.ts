@@ -1,11 +1,9 @@
 import { Router } from 'express'
-import { PrismaClient } from '@prisma/client'
 import type { Plant } from '@prisma/client'
 import type { Request, Response } from 'express'
 // import { writeFileSync } from 'fs'
 import { mapLight, mapHumidity, mapWatering } from './valueConversionHelpers.js'
 
-const prisma = new PrismaClient();
 export const router = Router();
 const TREFLE_API_TOKEN = process.env.TREFLE_API_TOKEN;
 
@@ -21,20 +19,6 @@ interface SpeciesDetailsResponseData {
   error: string | undefined,
   data: Omit<Plant, 'id' | 'nickname' | 'userId' | 'lastWatered' | 'wateringDays' | 'createdAt' | 'updatedAt'> | undefined
 }
-
-//POST /api/species/add
-interface AddPlantRequestBody {
-  nickname: string
-  slug: string
-  userId: string
-}
-interface AddPlantResponseData {
-  error: string | undefined,
-  data: Plant | undefined
-}
-
-
-
 
 
 
@@ -122,50 +106,3 @@ router.get('/:slug', async (req: Request, res: Response<SpeciesDetailsResponseDa
   }
 })
 
-// Save a new plant to the user's garden
-// POST /api/species/add
-router.post('/add', async (req: Request<{}, {}, AddPlantRequestBody>, res: Response<AddPlantResponseData>) => {
-  const { nickname, slug, userId } = req.body
-
-  if (!nickname || !slug || !userId) {
-    return res.status(400).json({ error: 'nickname, slug, and userId are required', data: undefined })
-  }
-
-  try {
-    const trefleRes = await fetch(
-      `https://trefle.io/api/v1/species/${slug}?token=${process.env.TREFLE_API_TOKEN}`
-    )
-    const trefleJson = await trefleRes.json()
-    const species = trefleJson.data
-
-    if (!species) {
-      return res.status(404).json({ error: 'Species not found on Trefle', data: undefined })
-    }
-
-    const plant = await prisma.plant.create({
-      data: {
-        nickname,
-        userId,
-        speciesName: species.scientific_name,
-        commonName: species.common_name || 'Unknown',
-        imageUrl: species.image_url,
-        trefleId: species.id,
-        slug: species.slug,
-        family: species.family,
-        light: mapLight(species.growth?.light),
-        humidity: mapHumidity(species.growth?.atmospheric_humidity),
-        watering: mapWatering(species.growth?.minimum_precipitation, species.growth?.maximum_precipitation),
-        growthRate: species.specifications?.growth_rate || null,
-        toxicity: species.specifications?.toxicity || null,
-        edible: species.edible || false,
-        flowerColor: species.flower?.color || [],
-        foliageColor: species.foliage?.color || [],
-      },
-    })
-
-    res.json({ error: undefined, data: plant })
-  } catch (error) {
-    console.error('Add plant error:', error)
-    res.status(500).json({ error: 'Failed to add plant', data: undefined })
-  }
-})

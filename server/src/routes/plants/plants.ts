@@ -7,11 +7,9 @@
 
 import { Router } from 'express'
 import type { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-import { auth } from '../../lib/auth.js'
+import { prisma, auth } from '../../lib/auth.js'
 import { mapLight, mapHumidity, mapWatering } from '../trefleApi/valueConversionHelpers.js'
 
-const prisma = new PrismaClient()
 export const router = Router()
 
 

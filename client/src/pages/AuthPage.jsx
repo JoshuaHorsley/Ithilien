@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { authClient } from '../lib/auth'
 import authBg from '../assets/AuthBg.jpeg'
 
-export default function Authpage(){
+export default function AuthPage(){
     const location = useLocation()
     const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState(location.pathname === '/register' ? 'register' : 'login')

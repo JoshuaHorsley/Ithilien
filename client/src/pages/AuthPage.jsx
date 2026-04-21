@@ -140,11 +140,6 @@ export default function Authpage(){
                                             )}
                                         </div>
                                     </Form.Group>
-                                    <div className='text-center mb-3'>
-                                        <Link to="/forgot-password" className='auth-link'>
-                                            Forgot Password?
-                                        </Link>
-                                    </div>
                                     <Button variant="success" className='w-100' type='submit'>Sign in</Button>
                                 </Form>
                             </Tab.Pane>

@@ -32,7 +32,7 @@ function LandingPage() {
                             title="Track Your Garden"
                             text="Keep all you plants organized in one place with care status and watering history"
                             image={trackImg}
-                            link='#'
+                            link='/garden'
                         />
                     </Col>
                     <Col md={4}>
@@ -40,7 +40,7 @@ function LandingPage() {
                             title="Get Reminders"
                             text="Never forget to water your plants again with smart, timely reminders"
                             image={careImg}
-                            link='#'
+                            link='/settings'
                         />
                     </Col>
                     <Col md={4}>
@@ -48,7 +48,7 @@ function LandingPage() {
                             title="Plan ahead"
                             text="View your watering schedule at a glance with a color-coded calendar"
                             image={calendarImg}
-                            link='#'
+                            link='/calendar'
                         />
                     </Col>
                 </Row>

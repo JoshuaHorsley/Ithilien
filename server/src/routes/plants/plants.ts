@@ -10,6 +10,10 @@ import type { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import { auth } from '../../lib/auth.js'
 import { mapLight, mapHumidity, mapWatering } from '../trefleApi/valueConversionHelpers.js'
+import { writeFileSync, mkdirSync, existsSync } from 'fs'
+import { join } from 'path'
+import { randomUUID } from 'crypto'
+
 
 const prisma = new PrismaClient()
 export const router = Router()
@@ -105,8 +109,31 @@ function getUrgencyScore(daysUntilWatering: number | null): number
 
 }
 
-
-
+/*
+* FUNCTION: saveBase64Image
+* PARAMETERS: base64String - the base64-encoded image data (no data URL prefix)
+* RETURNS: The relative URL path where the image was saved (e.g. /uploads/abc123.jpg)
+*          Returns null if saving fails.
+* DESCRIPTION: Decodes a base64 image string and writes it to the server's uploads
+*              folder with a randomly generated filename. Creates the uploads folder
+*              if it does not already exist.
+*/
+function saveBase64Image(base64String: string): string | null {
+    try {
+        const uploadsDir = join(process.cwd(), 'uploads')
+        if (!existsSync(uploadsDir)) {
+            mkdirSync(uploadsDir, { recursive: true })
+        }
+        const filename = `${randomUUID()}.jpg`
+        const filePath = join(uploadsDir, filename)
+        const imageBuffer = Buffer.from(base64String, 'base64')
+        writeFileSync(filePath, imageBuffer)
+        return `/uploads/${filename}`
+    } catch (err) {
+        console.error('Failed to save image:', err)
+        return null
+    }
+}
 
 // Get all plants for a user
 router.get('/', async (req: Request, res: Response) => {
@@ -149,7 +176,7 @@ router.post('/', async (req: Request, res: Response) => {
   const user = await getSessionUser(req)
   if (!user) return res.status(401).json({ error: 'Not authenticated' })
 
-  const { nickname, slug } = req.body
+  const { nickname, slug, photo } = req.body
 
   if (!nickname || !slug) {
     return res.status(400).json({ error: 'nickname and slug are required' })
@@ -172,7 +199,7 @@ router.post('/', async (req: Request, res: Response) => {
         userId: user.id,
         speciesName: species.scientific_name,
         commonName: species.common_name || 'Unknown',
-        imageUrl: species.image_url,
+        imageUrl: photo ? (saveBase64Image(photo) ?? species.image_url) : species.image_url,
         trefleId: species.id,
         slug: species.slug,
         family: species.family,

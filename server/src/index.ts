@@ -13,6 +13,7 @@ import { router as plantsRouter } from './routes/plants/plants.js'
 import { router as calendarRouter } from './routes/calendar.js'
 import { router as remindersRouter } from './routes/reminders.js'
 import { router as userRouter } from './routes/user.js'
+import { join } from 'path'
 
 
 dotenv.config()
@@ -25,7 +26,10 @@ app.use(cors({
   credentials: true,
 }))
 
-app.use(express.json())
+app.use(express.json({ limit: '10mb' }))
+
+// Serve uploaded plant photos as static files
+app.use('/uploads', express.static(join(process.cwd(), 'uploads')))
 
 // Health check
 app.get('/api/health', (_req: Request, res: Response) => {

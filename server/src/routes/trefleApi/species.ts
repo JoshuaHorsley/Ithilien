@@ -4,6 +4,8 @@ import type { Request, Response } from 'express'
 // import { writeFileSync } from 'fs'
 import { mapLight, mapHumidity, mapWatering } from './valueConversionHelpers.js'
 
+
+
 export const router = Router();
 const TREFLE_API_TOKEN = process.env.TREFLE_API_TOKEN;
 
@@ -19,7 +21,6 @@ interface SpeciesDetailsResponseData {
   error: string | undefined,
   data: Omit<Plant, 'id' | 'nickname' | 'userId' | 'lastWatered' | 'wateringDays' | 'createdAt' | 'updatedAt'> | undefined
 }
-
 
 
 
@@ -105,4 +106,5 @@ router.get('/:slug', async (req: Request, res: Response<SpeciesDetailsResponseDa
     res.status(500).json({ error: 'Failed to fetch plant details', data: undefined })
   }
 })
+
 

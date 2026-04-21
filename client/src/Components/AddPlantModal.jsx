@@ -7,7 +7,9 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [selectedPlant, setSelectedPlant] = useState(null)
-  const [searching, setSearching] = useState(false)
+    const [searching, setSearching] = useState(false)
+    const [photoFile, setPhotoFile] = useState(null)
+    const [photoPreview, setPhotoPreview] = useState(null)
 
   const { data: session } = authClient.useSession()
 
@@ -47,7 +49,29 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
   const handleClearSelection = () => {
     setSelectedPlant(null)
     setQuery('')
-  }
+    }
+
+    // When the user picks a photo, store it and show a preview
+    const handlePhotoChange = (e) => {
+        const file = e.target.files[0]
+        if (!file) {
+            setPhotoFile(null)
+            setPhotoPreview(null)
+            return
+        }
+        setPhotoFile(file)
+        setPhotoPreview(URL.createObjectURL(file))
+    }
+
+    // Encode the file to base64 so it can be sent in the JSON body
+    const encodeImageToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = () => resolve(reader.result.split(',')[1])
+            reader.onerror = () => reject(new Error('Failed to read image file'))
+            reader.readAsDataURL(file)
+        })
+    }
 
   // Reset everything when the modal closes
   const handleClose = () => {
@@ -55,6 +79,8 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
     setQuery('')
     setResults([])
     setSelectedPlant(null)
+    setPhotoFile(null)
+    setPhotoPreview(null)
     onHide()
   }
 
@@ -62,14 +88,23 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
   const handleSubmit = async () => {
     if (!selectedPlant || !nickname.trim() || !session?.user?.id) return
 
-    try {
+      try {
+
+        // Encode photo to base64 if one was selected
+        let photoBase64 = null
+        if (photoFile) {
+            photoBase64 = await encodeImageToBase64(photoFile)
+        }
+
+
       const res = await fetch('http://localhost:3003/api/plants', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
           nickname: nickname.trim(),
-          slug: selectedPlant.slug,
+            slug: selectedPlant.slug,
+            photo: photoBase64 || null, 
         }),
       })
 
@@ -99,9 +134,27 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
         <Form.Group className='mb-3 text-center'>
           <Form.Label className='fw-bold'>Photo</Form.Label>
           <div className='photo-upload-area'>
-            <Form.Control type='file' accept='image/*' />
+                      <Form.Control
+                          type='file'
+                          accept='image/*'
+                          onChange={handlePhotoChange}
+                      />
           </div>
-        </Form.Group>
+
+
+        {/* Preview of the selected photo */}
+        {photoPreview && (
+            <div className='mt-2'>
+                <Image
+                    src={photoPreview}
+                    rounded
+                    style={{ width: 80, height: 80, objectFit: 'cover' }}
+                    alt="Photo preview"
+                />
+            </div>
+                  )}
+
+         </Form.Group>
 
         {/* Nickname */}
         <Form.Group className='mb-3'>

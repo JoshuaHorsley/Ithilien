@@ -44,36 +44,39 @@
 .calendar-table {
     width: 100%;
     max-width: 900px;
-}
-
-.calendar-weekdays,
-.calendar-row {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
 }
 
 .calendar-weekdays {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
     text-align: center;
     font-weight: 700;
-    margin-bottom: 5px;
+}
+
+.calendar-weekdays div {
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+    padding-bottom: 5px;
+}
+
+.calendar-row {
+    display: contents;
 }
 
 .calendar-cell {
-    border: 1px solid #000;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
     min-height: 80px;
     padding: 8px;
     background-color: #fff;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-}
-
-.calendar-row + .calendar-row .calendar-cell {
-    border-top: none;
-}
-
-.calendar-row .calendar-cell + .calendar-cell {
-    border-left: none;
 }
 
 .calendar-legend {

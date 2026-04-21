@@ -52,6 +52,8 @@ export default function Calendar() {
         days.push(i)
     }
 
+    const emptyCells = 35 - days.length
+
     return (
         <Container fluid className='calendar-page'>
             <div className='calendar-header'>
@@ -97,6 +99,10 @@ export default function Calendar() {
                             <div key={day} className='calendar-cell'>
                                 {day}
                             </div>
+                        ))}
+
+                        {[...Array(emptyCells)].map((_, index) => (
+                            <div key={`empty-${index}`} className='calendar-cell'></div>
                         ))}
                     </div>
                 </div>

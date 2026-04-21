@@ -14,7 +14,7 @@ export default function MyGarden() {
   const fetchPlants = async () => {
     if (!session?.user?.id) return
     try {
-      const res = await fetch(`http://localhost:3003/api/plants`, {
+      const res = await fetch(`${import.meta.env.API_URL}/api/plants`, {
         credentials: 'include',
       })
       const json = await res.json()
@@ -47,7 +47,7 @@ export default function MyGarden() {
               //If the plant has an image, use the image API to get the image.
               //Otherwise, use the imageUrl from the Trefle API.
               image: plant.plantImageId
-                ? `http://localhost:3003/api/images/${plant.plantImageId}`
+                ? `${import.meta.env.API_URL}/api/images/${plant.plantImageId}`
                 : plant.imageUrl || 'https://placehold.co/400x300/f0f7f0/2e7d32?text=No+Photo',
               daysUntilWatering: plant.daysUntilWatering,
             }} />

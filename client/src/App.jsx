@@ -43,7 +43,7 @@ function App()
             {
 
                 const res = await fetch(
-                    `http://localhost:3003/api/reminders?userId=${session.user.id}`,
+                    `${import.meta.env.API_URL}/reminders?userId=${session.user.id}`,
                     { credentials: 'include' }
 
                 )

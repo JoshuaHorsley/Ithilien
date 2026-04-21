@@ -3,10 +3,14 @@ import { Container, Button } from 'react-bootstrap'
 import './Calendar.css'
 
 export default function Calendar() {
+    const today = new Date()
+
+    const [month, setMonth] = useState(today.getMonth() + 1)
+    const [year, setYear] = useState(today.getFullYear())
     const [calendarData, setCalendarData] = useState(null)
 
     useEffect(() => {
-        fetch('http://localhost:3003/api/calendar', {
+        fetch(`http://localhost:3003/api/calendar?year=${year}&month=${month}`, {
             credentials: 'include'
         })
             .then(res => res.json())
@@ -14,7 +18,25 @@ export default function Calendar() {
                 console.log('Calendar API:', data)
                 setCalendarData(data)
             })
-    }, [])
+    }, [year, month])
+
+    function handlePreviousMonth() {
+        if (month === 1) {
+            setMonth(12)
+            setYear(year - 1)
+        } else {
+            setMonth(month - 1)
+        }
+    }
+
+    function handleNextMonth() {
+        if (month === 12) {
+            setMonth(1)
+            setYear(year + 1)
+        } else {
+            setMonth(month + 1)
+        }
+    }
 
     const monthName =
         calendarData &&
@@ -28,11 +50,25 @@ export default function Calendar() {
                 <h1 className='calendar-title'>Watering Schedule</h1>
 
                 <div className='calendar-month-nav'>
-                    <Button variant='light' className='calendar-nav-btn'>{'<'}</Button>
+                    <Button
+                        variant='light'
+                        className='calendar-nav-btn'
+                        onClick={handlePreviousMonth}
+                    >
+                        {'<'}
+                    </Button>
+
                     <h4 className='calendar-month mb-0'>
                         {calendarData ? `${monthName} ${calendarData.data.year}` : ''}
                     </h4>
-                    <Button variant='light' className='calendar-nav-btn'>{'>'}</Button>
+
+                    <Button
+                        variant='light'
+                        className='calendar-nav-btn'
+                        onClick={handleNextMonth}
+                    >
+                        {'>'}
+                    </Button>
                 </div>
             </div>
 

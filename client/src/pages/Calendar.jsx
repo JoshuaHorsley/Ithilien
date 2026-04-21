@@ -63,7 +63,8 @@ export default function Calendar() {
     }
 
     const totalCells = firstDayOfMonth + days.length
-    const remainingCells = 35 - totalCells
+    const totalCalendarCells = Math.ceil(totalCells / 7) * 7
+    const remainingCells = totalCalendarCells - totalCells
 
     const endEmptyCells = []
 
@@ -72,6 +73,7 @@ export default function Calendar() {
             <div key={`end-empty-${i}`} className='calendar-cell'></div>
         )
     }
+    
     return (
         <Container fluid className='calendar-page'>
             <div className='calendar-header'>

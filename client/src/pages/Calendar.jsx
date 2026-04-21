@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Container, Row, Col, Button } from 'react-bootstrap'
+import { Container, Button } from 'react-bootstrap'
 import './Calendar.css'
 
 export default function Calendar() {
@@ -14,10 +14,13 @@ export default function Calendar() {
                 console.log('Calendar API:', data)
                 setCalendarData(data)
             })
-            .catch(err => {
-                console.error('Calendar fetch error:', err)
-            })
     }, [])
+
+    const monthName =
+        calendarData &&
+        new Date(calendarData.data.year, calendarData.data.month - 1).toLocaleString('en-US', {
+            month: 'long'
+        })
 
     return (
         <Container fluid className='calendar-page'>
@@ -27,9 +30,7 @@ export default function Calendar() {
                 <div className='calendar-month-nav'>
                     <Button variant='light' className='calendar-nav-btn'>{'<'}</Button>
                     <h4 className='calendar-month mb-0'>
-                        {calendarData
-                            ? `${new Date(calendarData.data.year, calendarData.data.month - 1).toLocaleString('en-US', { month: 'long' })} ${calendarData.data.year}`
-                            : 'Loading...'}
+                        {calendarData ? `${monthName} ${calendarData.data.year}` : ''}
                     </h4>
                     <Button variant='light' className='calendar-nav-btn'>{'>'}</Button>
                 </div>

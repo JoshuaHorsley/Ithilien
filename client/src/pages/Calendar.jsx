@@ -44,6 +44,14 @@ export default function Calendar() {
             month: 'long'
         })
 
+    const daysInMonth = new Date(year, month, 0).getDate()
+
+    const days = []
+
+    for (let i = 1; i <= daysInMonth; i++) {
+        days.push(i)
+    }
+
     return (
         <Container fluid className='calendar-page'>
             <div className='calendar-header'>
@@ -85,53 +93,11 @@ export default function Calendar() {
                     </div>
 
                     <div className='calendar-row'>
-                        <div className='calendar-cell'>1</div>
-                        <div className='calendar-cell'>2</div>
-                        <div className='calendar-cell'>3</div>
-                        <div className='calendar-cell'>4</div>
-                        <div className='calendar-cell'>5</div>
-                        <div className='calendar-cell'>6</div>
-                        <div className='calendar-cell'>7</div>
-                    </div>
-
-                    <div className='calendar-row'>
-                        <div className='calendar-cell'>8</div>
-                        <div className='calendar-cell'>9</div>
-                        <div className='calendar-cell'>10</div>
-                        <div className='calendar-cell'>11</div>
-                        <div className='calendar-cell'>12</div>
-                        <div className='calendar-cell'>13</div>
-                        <div className='calendar-cell'>14</div>
-                    </div>
-
-                    <div className='calendar-row'>
-                        <div className='calendar-cell'>15</div>
-                        <div className='calendar-cell'>16</div>
-                        <div className='calendar-cell'>17</div>
-                        <div className='calendar-cell'>18</div>
-                        <div className='calendar-cell'>19</div>
-                        <div className='calendar-cell'>20</div>
-                        <div className='calendar-cell'>21</div>
-                    </div>
-
-                    <div className='calendar-row'>
-                        <div className='calendar-cell'>22</div>
-                        <div className='calendar-cell'>23</div>
-                        <div className='calendar-cell'>24</div>
-                        <div className='calendar-cell'>25</div>
-                        <div className='calendar-cell'>26</div>
-                        <div className='calendar-cell'>27</div>
-                        <div className='calendar-cell'>28</div>
-                    </div>
-
-                    <div className='calendar-row'>
-                        <div className='calendar-cell'>29</div>
-                        <div className='calendar-cell'>30</div>
-                        <div className='calendar-cell'>31</div>
-                        <div className='calendar-cell'></div>
-                        <div className='calendar-cell'></div>
-                        <div className='calendar-cell'></div>
-                        <div className='calendar-cell'></div>
+                        {days.map(day => (
+                            <div key={day} className='calendar-cell'>
+                                {day}
+                            </div>
+                        ))}
                     </div>
                 </div>
 

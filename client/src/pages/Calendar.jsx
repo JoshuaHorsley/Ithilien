@@ -52,7 +52,15 @@ export default function Calendar() {
         days.push(i)
     }
 
-    const emptyCells = 35 - days.length
+    const firstDayOfMonth = new Date(year, month - 1, 1).getDay()
+
+    const emptyCells = []
+
+    for (let i = 0; i < firstDayOfMonth; i++) {
+        emptyCells.push(
+            <div key={`start-empty-${i}`} className='calendar-cell'></div>
+        )
+    }
 
     return (
         <Container fluid className='calendar-page'>
@@ -95,14 +103,12 @@ export default function Calendar() {
                     </div>
 
                     <div className='calendar-row'>
+                        {emptyCells}
+
                         {days.map(day => (
                             <div key={day} className='calendar-cell'>
                                 {day}
                             </div>
-                        ))}
-
-                        {[...Array(emptyCells)].map((_, index) => (
-                            <div key={`empty-${index}`} className='calendar-cell'></div>
                         ))}
                     </div>
                 </div>

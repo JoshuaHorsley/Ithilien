@@ -16,6 +16,9 @@ const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  session: {
+    expiresIn: 60 * 60 * 24, // 24 hours, per DDD spec
+  },
   trustedOrigins: ['http://localhost:5173'],
 })
 

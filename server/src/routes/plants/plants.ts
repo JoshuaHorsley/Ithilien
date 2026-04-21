@@ -147,7 +147,7 @@ router.post('/', async (req: Request, res: Response) => {
   const user = await getSessionUser(req)
   if (!user) return res.status(401).json({ error: 'Not authenticated' })
 
-  const { nickname, slug } = req.body
+  const { nickname, slug, wateringDays } = req.body
 
   if (!nickname || !slug) {
     return res.status(400).json({ error: 'nickname and slug are required' })
@@ -168,6 +168,7 @@ router.post('/', async (req: Request, res: Response) => {
       data: {
         nickname,
         userId: user.id,
+        wateringDays: wateringDays ?? null,
         speciesName: species.scientific_name,
         commonName: species.common_name || 'Unknown',
         imageUrl: species.image_url,

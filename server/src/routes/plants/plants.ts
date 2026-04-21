@@ -7,11 +7,9 @@
 
 import { Router } from 'express'
 import type { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-import { auth } from '../../lib/auth.js'
+import { prisma, auth } from '../../lib/auth.js'
 import { mapLight, mapHumidity, mapWatering } from '../trefleApi/valueConversionHelpers.js'
 
-const prisma = new PrismaClient()
 export const router = Router()
 
 
@@ -278,7 +276,6 @@ router.put('/:id', async (req: Request, res: Response) => {
 
   const id = req.params.id as string
   const { nickname, wateringDays, imageUrl } = req.body
-  if (typeof id !== 'string') return res.status(400).json({ error: 'Invalid plant id' })
 
   try {
     const existing = await prisma.plant.findUnique({ where: { id } })

@@ -43,7 +43,7 @@ function App()
             {
 
                 const res = await fetch(
-                    `http://localhost:3003/api/reminders?userId=${session.user.id}`,
+                    `http://localhost:3003/api/reminders`,
                     { credentials: 'include' }
 
                 )

@@ -3,7 +3,6 @@ import type { Request, Response } from 'express'
 
 import { auth } from './lib/auth.js'
 import { toNodeHandler } from 'better-auth/node'
-import { PrismaClient } from '@prisma/client'
 
 import dotenv from 'dotenv'
 import cors from 'cors'
@@ -16,7 +15,6 @@ import { router as userRouter } from './routes/user.js'
 
 
 dotenv.config()
-const prisma = new PrismaClient()
 const app = express()
 const PORT = process.env.PORT || 3003
 

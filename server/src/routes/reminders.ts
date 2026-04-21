@@ -48,10 +48,9 @@ async function getSessionUser(req: Request): Promise<{ id: string; email: string
 
 /*
  * ROUTE: GET /api/reminders
- * PARAMETERS (query): userId - the ID of the user to fetch reminders for
  * RETURNS: A JSON object containing a count of upcoming reminders and an array of plant details
- * DESCRIPTION: Fetches all plants for the user that need watering within the next
- *              day or are already overdue. For each matching plant, calculates the
+ * DESCRIPTION: Fetches all plants for the authenticated user that need watering within the
+ *              next day or are already overdue. For each matching plant, calculates the
  *              next watering date. Returns a count and the list of plant details.
  *
  * RESPONSE:
@@ -80,31 +79,13 @@ router.get('/', async (req: Request, res: Response) => {
 
     }
 
-    // Validate that userId was provided in the query string
-    const { userId } = req.query
-
-    if (!userId || typeof userId !== 'string')
-    {
-
-        return res.status(400).json({ error: 'userId is required' })
-
-    }
-
-    // Make sure the user can only fetch their own reminders
-    if (userId !== user.id)
-    {
-
-        return res.status(403).json({ error: 'You do not have permission to view these reminders' })
-
-    }
-
     try
     {
 
         // Fetch all plants that have watering data so we can calculate urgency
         const allPlants = await prisma.plant.findMany({
             where: {
-                userId: userId,
+                userId: user.id,
                 lastWatered: { not: null },
                 wateringDays: { not: null },
             },

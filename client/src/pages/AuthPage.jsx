@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { authClient } from '../lib/auth'
 import authBg from '../assets/AuthBg.jpeg'
 
-export default function Authpage(){
+export default function AuthPage(){
     const location = useLocation()
     const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState(location.pathname === '/register' ? 'register' : 'login')
@@ -140,11 +140,6 @@ export default function Authpage(){
                                             )}
                                         </div>
                                     </Form.Group>
-                                    <div className='text-center mb-3'>
-                                        <Link to="/forgot-password" className='auth-link'>
-                                            Forgot Password?
-                                        </Link>
-                                    </div>
                                     <Button variant="success" className='w-100' type='submit'>Sign in</Button>
                                 </Form>
                             </Tab.Pane>

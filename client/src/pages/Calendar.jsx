@@ -1,7 +1,24 @@
+import { useEffect, useState } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
 import './Calendar.css'
 
 export default function Calendar() {
+    const [calendarData, setCalendarData] = useState(null)
+
+    useEffect(() => {
+        fetch('http://localhost:3003/api/calendar', {
+            credentials: 'include'
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log('Calendar API:', data)
+                setCalendarData(data)
+            })
+            .catch(err => {
+                console.error('Calendar fetch error:', err)
+            })
+    }, [])
+
     return (
         <Container fluid className='calendar-page'>
             <div className='calendar-header'>

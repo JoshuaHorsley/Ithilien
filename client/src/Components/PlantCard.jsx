@@ -6,7 +6,9 @@
  */
 
 import { Card, Dropdown, Badge } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+
+const API = 'http://localhost:3003/api'
 
 /*
  * FUNCTION: getCareStatus
@@ -46,13 +48,38 @@ function getCareStatus(daysUntilWatering) {
 
 /*
  * FUNCTION: PlantCard
- * PARAMETERS: plant - an object containing plant data (id, nickname, species, image, daysUntilWatering)
+ * PARAMETERS: plant    - an object containing plant data (id, nickname, species, image, daysUntilWatering)
+ *             onAction - callback invoked after a quick action so the parent can refresh the list
  * RETURNS: A React component that renders a card with the plant's information and care status
  * DESCRIPTION: Displays the plant's photo, nickname, species, and a badge indicating how soon it needs watering.
  */
-export default function PlantCard({ plant }) {
+export default function PlantCard({ plant, onAction }) {
 
   const careStatus = getCareStatus(plant.daysUntilWatering)
+  const navigate = useNavigate()
+
+  const handleWater = async () => {
+    try {
+      await fetch(`${API}/plants/${plant.id}/water`, { method: 'POST', credentials: 'include' })
+      if (onAction) onAction()
+    } catch (err) {
+      console.error('Water error:', err)
+    }
+  }
+
+  const handleEdit = () => {
+    navigate(`/plants/${plant.id}`)
+  }
+
+  const handleDelete = async () => {
+    if (!confirm(`Delete "${plant.nickname}"? This cannot be undone.`)) return
+    try {
+      await fetch(`${API}/plants/${plant.id}`, { method: 'DELETE', credentials: 'include' })
+      if (onAction) onAction()
+    } catch (err) {
+      console.error('Delete error:', err)
+    }
+  }
 
   return (
       <Card className='h-100 plant-card'>
@@ -63,9 +90,9 @@ export default function PlantCard({ plant }) {
             ⋮
           </Dropdown.Toggle>
           <Dropdown.Menu align='end'>
-            <Dropdown.Item>Mark as Watered</Dropdown.Item>
-            <Dropdown.Item>Edit Plant</Dropdown.Item>
-            <Dropdown.Item className='text-danger'>Delete Plant</Dropdown.Item>
+            <Dropdown.Item onClick={handleWater}>Mark as Watered</Dropdown.Item>
+            <Dropdown.Item onClick={handleEdit}>Edit Plant</Dropdown.Item>
+            <Dropdown.Item className='text-danger' onClick={handleDelete}>Delete Plant</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </div>

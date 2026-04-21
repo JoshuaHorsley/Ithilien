@@ -40,13 +40,16 @@ export default function MyGarden() {
       <Row className="g-4">
         {plants.map((plant) => (
           <Col md={4} key={plant.id}>
-            <PlantCard plant={{
-              id: plant.id,
-              nickname: plant.nickname,
-              species: plant.speciesName,
-              image: plant.imageUrl || 'https://placehold.co/400x300/f0f7f0/2e7d32?text=No+Photo',
-              daysUntilWatering: plant.daysUntilWatering,
-            }} />
+            <PlantCard
+              plant={{
+                id: plant.id,
+                nickname: plant.nickname,
+                species: plant.speciesName,
+                image: plant.imageUrl || 'https://placehold.co/400x300/f0f7f0/2e7d32?text=No+Photo',
+                daysUntilWatering: plant.daysUntilWatering,
+              }}
+              onAction={fetchPlants}
+            />
           </Col>
         ))}
         <Col md={4}>

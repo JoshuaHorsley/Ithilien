@@ -14,7 +14,7 @@ export default function MyGarden() {
   const fetchPlants = async () => {
     if (!session?.user?.id) return
     try {
-      const res = await fetch(`http://localhost:3003/api/plants?userId=${session.user.id}`, {
+      const res = await fetch(`http://localhost:3003/api/plants`, {
         credentials: 'include',
       })
       const json = await res.json()

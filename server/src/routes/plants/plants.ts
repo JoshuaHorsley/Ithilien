@@ -8,9 +8,23 @@
 import { Router } from 'express'
 import type { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
+import { auth } from '../../lib/auth.js'
+import { mapLight, mapHumidity, mapWatering } from '../trefleApi/valueConversionHelpers.js'
 
 const prisma = new PrismaClient()
 export const router = Router()
+
+
+async function getSessionUser(req: Request): Promise<{ id: string; email: string } | null> {
+    try {
+        const session = await auth.api.getSession({ headers: req.headers as any })
+        if (!session?.user) return null
+        return { id: session.user.id, email: session.user.email }
+    }
+    catch {
+        return null
+    }
+}
 
 
 
@@ -96,14 +110,12 @@ function getUrgencyScore(daysUntilWatering: number | null): number
 
 // Get all plants for a user
 router.get('/', async (req: Request, res: Response) => {
-    const { userId } = req.query
-
-    // typeof check acts as a type guard so TypeScript knows userId is a string after this
-    if (!userId || typeof userId !== 'string') return res.status(400).json({ error: 'userId is required' })
+    const user = await getSessionUser(req)
+    if (!user) return res.status(401).json({ error: 'Not authenticated' })
 
     try {
         const plantsFromDb = await prisma.plant.findMany({
-            where: { userId },
+            where: { userId: user.id },
         })
 
         // Calculate next watering date and days until watering for each plant
@@ -132,9 +144,62 @@ router.get('/', async (req: Request, res: Response) => {
 })
 
 
+// Add a new plant to the user's garden
+router.post('/', async (req: Request, res: Response) => {
+  const user = await getSessionUser(req)
+  if (!user) return res.status(401).json({ error: 'Not authenticated' })
+
+  const { nickname, slug } = req.body
+
+  if (!nickname || !slug) {
+    return res.status(400).json({ error: 'nickname and slug are required' })
+  }
+
+  try {
+    const trefleRes = await fetch(
+      `https://trefle.io/api/v1/species/${slug}?token=${process.env.TREFLE_API_TOKEN}`
+    )
+    const trefleJson = await trefleRes.json() as any
+    const species = trefleJson.data
+
+    if (!species) {
+      return res.status(404).json({ error: 'Species not found on Trefle' })
+    }
+
+    const plant = await prisma.plant.create({
+      data: {
+        nickname,
+        userId: user.id,
+        speciesName: species.scientific_name,
+        commonName: species.common_name || 'Unknown',
+        imageUrl: species.image_url,
+        trefleId: species.id,
+        slug: species.slug,
+        family: species.family,
+        light: mapLight(species.growth?.light),
+        humidity: mapHumidity(species.growth?.atmospheric_humidity),
+        watering: mapWatering(species.growth?.minimum_precipitation, species.growth?.maximum_precipitation),
+        growthRate: species.specifications?.growth_rate || null,
+        toxicity: species.specifications?.toxicity || null,
+        edible: species.edible || false,
+        flowerColor: species.flower?.color || [],
+        foliageColor: species.foliage?.color || [],
+      },
+    })
+
+    res.json({ data: plant })
+  } catch (error) {
+    console.error('Add plant error:', error)
+    res.status(500).json({ error: 'Failed to add plant' })
+  }
+})
+
 
 // Get a single plant by ID (with care logs)
 router.get('/:id', async (req: Request, res: Response) => {
+  const user = await getSessionUser(req)
+  if (!user) return res.status(401).json({ error: 'Not authenticated' })
+
   const id = req.params.id as string
 
   try {
@@ -146,6 +211,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     })
 
     if (!plant) return res.status(404).json({ error: 'Plant not found' })
+    if (plant.userId !== user.id) return res.status(403).json({ error: 'Forbidden' })
     res.json({ data: plant })
   } catch (error) {
     console.error('Fetch plant error:', error)
@@ -155,9 +221,16 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 // Mark a plant as watered
 router.post('/:id/water', async (req: Request, res: Response) => {
+  const user = await getSessionUser(req)
+  if (!user) return res.status(401).json({ error: 'Not authenticated' })
+
   const id = req.params.id as string
 
   try {
+    const existing = await prisma.plant.findUnique({ where: { id } })
+    if (!existing) return res.status(404).json({ error: 'Plant not found' })
+    if (existing.userId !== user.id) return res.status(403).json({ error: 'Forbidden' })
+
     const now = new Date()
 
     const plant = await prisma.plant.update({
@@ -178,8 +251,15 @@ router.post('/:id/water', async (req: Request, res: Response) => {
 
 // Care history log for a plant
 router.get('/:id/history', async (req: Request, res: Response) => {
+  const user = await getSessionUser(req)
+  if (!user) return res.status(401).json({ error: 'Not authenticated' })
+
   const id = req.params.id as string
   try {
+    const plant = await prisma.plant.findUnique({ where: { id } })
+    if (!plant) return res.status(404).json({ error: 'Plant not found' })
+    if (plant.userId !== user.id) return res.status(403).json({ error: 'Forbidden' })
+
     const logs = await prisma.careLog.findMany({
       where: { plantId: id },
       orderBy: { date: 'desc' },
@@ -193,10 +273,17 @@ router.get('/:id/history', async (req: Request, res: Response) => {
 
 // Edit a plant (nickname and/or watering schedule)
 router.put('/:id', async (req: Request, res: Response) => {
+  const user = await getSessionUser(req)
+  if (!user) return res.status(401).json({ error: 'Not authenticated' })
+
   const id = req.params.id as string
   const { nickname, wateringDays, imageUrl } = req.body
 
   try {
+    const existing = await prisma.plant.findUnique({ where: { id } })
+    if (!existing) return res.status(404).json({ error: 'Plant not found' })
+    if (existing.userId !== user.id) return res.status(403).json({ error: 'Forbidden' })
+
     const updateData: { nickname?: string; wateringDays?: number; imageUrl?: string } = {}
     if (nickname !== undefined) updateData.nickname = nickname
     if (wateringDays !== undefined) updateData.wateringDays = wateringDays
@@ -216,8 +303,15 @@ router.put('/:id', async (req: Request, res: Response) => {
 
 // Delete a plant
 router.delete('/:id', async (req: Request, res: Response) => {
+  const user = await getSessionUser(req)
+  if (!user) return res.status(401).json({ error: 'Not authenticated' })
+
   const id = req.params.id as string
   try {
+    const existing = await prisma.plant.findUnique({ where: { id } })
+    if (!existing) return res.status(404).json({ error: 'Plant not found' })
+    if (existing.userId !== user.id) return res.status(403).json({ error: 'Forbidden' })
+
     await prisma.careLog.deleteMany({ where: { plantId: id } })
     await prisma.plant.delete({ where: { id } })
     res.json({ message: 'Plant deleted' })

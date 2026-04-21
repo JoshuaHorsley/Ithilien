@@ -62,6 +62,16 @@ export default function Calendar() {
         )
     }
 
+    const totalCells = firstDayOfMonth + days.length
+    const remainingCells = 35 - totalCells
+
+    const endEmptyCells = []
+
+    for (let i = 0; i < remainingCells; i++) {
+        endEmptyCells.push(
+            <div key={`end-empty-${i}`} className='calendar-cell'></div>
+        )
+    }
     return (
         <Container fluid className='calendar-page'>
             <div className='calendar-header'>
@@ -110,6 +120,8 @@ export default function Calendar() {
                                 {day}
                             </div>
                         ))}
+
+                        {endEmptyCells}
                     </div>
                 </div>
 

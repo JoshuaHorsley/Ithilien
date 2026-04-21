@@ -278,6 +278,7 @@ router.put('/:id', async (req: Request, res: Response) => {
 
   const id = req.params.id as string
   const { nickname, wateringDays, imageUrl } = req.body
+  if (typeof id !== 'string') return res.status(400).json({ error: 'Invalid plant id' })
 
   try {
     const existing = await prisma.plant.findUnique({ where: { id } })

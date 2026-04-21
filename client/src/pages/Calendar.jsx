@@ -26,7 +26,9 @@ export default function Calendar() {
 
                 <div className='calendar-month-nav'>
                     <Button variant='light' className='calendar-nav-btn'>{'<'}</Button>
-                    <h4 className='calendar-month mb-0'>February 2026</h4>
+                    <h4 className='calendar-month mb-0'>
+                        {calendarData ? `${calendarData.data.month}/${calendarData.data.year}` : 'Loading...'}
+                    </h4>
                     <Button variant='light' className='calendar-nav-btn'>{'>'}</Button>
                 </div>
             </div>

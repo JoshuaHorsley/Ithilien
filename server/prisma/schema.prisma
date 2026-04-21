@@ -18,6 +18,7 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   plants        Plant[]
+  plantImages   PlantImage[]
   sessions      Session[]
   accounts      Account[]
 }
@@ -30,7 +31,11 @@ model Plant {
   lastWatered  DateTime?
   wateringDays Int?
   userId       String
-  user         User     @relation(fields: [userId], references: [id])
+  user         User        @relation(fields: [userId], references: [id])
+
+  plantImageId String?     @unique
+  plantImage   PlantImage? @relation(fields: [plantImageId], references: [id])
+
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   careLogs     CareLog[]
@@ -48,7 +53,25 @@ model Plant {
   edible       Boolean  @default(false)
   flowerColor  Json     @default("[]")
   foliageColor Json     @default("[]")
+
 }
+
+model PlantImage {
+  id         String  @id @default(cuid())
+  storageKey String  @unique
+  byteSize   Int
+  width      Int
+  height     Int
+
+  ownerId    String
+  owner      User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  plant      Plant?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 
 model CareLog {
   id        String   @id @default(cuid())

@@ -4,6 +4,7 @@ import { authClient } from '../lib/auth'
 
 export default function AddPlantModal({ show, onHide, onPlantAdded }) {
   const [nickname, setNickname] = useState('')
+  const [wateringDays, setWateringDays] = useState('')
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [selectedPlant, setSelectedPlant] = useState(null)
@@ -53,6 +54,7 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
   // Reset everything when the modal closes
   const handleClose = () => {
     setNickname('')
+    setWateringDays('')
     setQuery('')
     setResults([])
     setSelectedPlant(null)
@@ -95,6 +97,7 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
           nickname: nickname.trim(),
           slug: selectedPlant.slug,
           imageId: imageId,
+          wateringDays: wateringDays === '' ? null : Number(wateringDays),
         }),
       })
 
@@ -141,6 +144,19 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
           />
+        </Form.Group>
+
+        {/* Watering interval */}
+        <Form.Group className='mb-3'>
+          <Form.Label>Watering interval (days)</Form.Label>
+          <Form.Control
+            type='number'
+            min='1'
+            placeholder='e.g. 7'
+            value={wateringDays}
+            onChange={(e) => setWateringDays(e.target.value)}
+          />
+          <Form.Text className='text-muted'>How often this plant needs watering. You can change this later.</Form.Text>
         </Form.Group>
 
         {/* Species search */}

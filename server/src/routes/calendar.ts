@@ -1,9 +1,19 @@
 import { Router } from 'express'
 import type { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
+import { prisma, auth } from '../lib/auth.js'
 
-const prisma = new PrismaClient()
 export const router = Router()
+
+async function getSessionUser(req: Request): Promise<{ id: string; email: string } | null> {
+    try {
+        const session = await auth.api.getSession({ headers: req.headers as any })
+        if (!session?.user) return null
+        return { id: session.user.id, email: session.user.email }
+    }
+    catch {
+        return null
+    }
+}
 
 function addDays(date: Date, days: number): Date {
     const result = new Date(date)
@@ -24,11 +34,10 @@ function isSameOrBefore(a: Date, b: Date): boolean {
 }
 
 router.get('/', async (req: Request, res: Response) => {
-    const { userId, year, month } = req.query
+    const user = await getSessionUser(req)
+    if (!user) return res.status(401).json({ error: 'Not authenticated' })
 
-    if (typeof userId !== 'string') {
-        return res.status(400).json({ error: 'userId is required' })
-    }
+    const { year, month } = req.query
 
     const now = new Date()
 
@@ -52,7 +61,7 @@ router.get('/', async (req: Request, res: Response) => {
         //load user's plants that have a watering schedule and its watering history
         const plants = await prisma.plant.findMany({
             where: {
-                userId,
+                userId: user.id,
                 wateringDays: {
                     not: null,
                 },
@@ -81,7 +90,7 @@ router.get('/', async (req: Request, res: Response) => {
             if (!plant.wateringDays || plant.wateringDays < 1) continue
 
             const interval = plant.wateringDays
-            const seedDate = plant.lastWatered ?? plant.createdAt
+            const seedDate = plant.createdAt
 
             let dueDate = addDays(new Date(seedDate), interval)
 

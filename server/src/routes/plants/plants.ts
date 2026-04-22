@@ -7,11 +7,9 @@
 
 import { Router } from 'express'
 import type { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-import { auth } from '../../lib/auth.js'
+import { prisma, auth } from '../../lib/auth.js'
 import { mapLight, mapHumidity, mapWatering } from '../trefleApi/valueConversionHelpers.js'
 
-const prisma = new PrismaClient()
 export const router = Router()
 
 
@@ -149,7 +147,7 @@ router.post('/', async (req: Request, res: Response) => {
   const user = await getSessionUser(req)
   if (!user) return res.status(401).json({ error: 'Not authenticated' })
 
-  const { nickname, slug, imageId } = req.body
+  const { nickname, slug, imageId, wateringDays } = req.body
 
   if (!nickname || !slug) {
     return res.status(400).json({ error: 'nickname and slug are required' })
@@ -170,6 +168,7 @@ router.post('/', async (req: Request, res: Response) => {
       data: {
         nickname,
         userId: user.id,
+        wateringDays: wateringDays ?? null,
         speciesName: species.scientific_name,
         commonName: species.common_name || 'Unknown',
         imageUrl: species.image_url,
@@ -179,6 +178,7 @@ router.post('/', async (req: Request, res: Response) => {
         light: mapLight(species.growth?.light),
         humidity: mapHumidity(species.growth?.atmospheric_humidity),
         watering: mapWatering(species.growth?.minimum_precipitation, species.growth?.maximum_precipitation),
+        wateringDays: 7,
         growthRate: species.specifications?.growth_rate || null,
         toxicity: species.specifications?.toxicity || null,
         edible: species.edible || false,

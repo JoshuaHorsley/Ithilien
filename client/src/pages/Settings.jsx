@@ -7,7 +7,7 @@
 
 import { useState, useEffect } from 'react'
 import { Container, Card, Form, Button, Alert, Modal, Spinner } from 'react-bootstrap'
-import { BsEye, BsEyeSlash, BsPersonCircle, BsShieldLock, BsBell, BsBoxArrowRight, BsTrash } from 'react-icons/bs'
+import { BsEye, BsEyeSlash, BsPersonCircle, BsShieldLock, BsBoxArrowRight, BsTrash } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 import { authClient } from '../lib/auth'
 
@@ -110,12 +110,7 @@ export default function Settings()
     const [passwordError, setPasswordError] = useState('')
     const [passwordLoading, setPasswordLoading] = useState(false)
 
-    // Notification preferences state (persisted to localStorage)
-    const [emailNotifs, setEmailNotifs] = useState(() => localStorage.getItem('notif_email') !== 'false')
-    const [pushNotifs, setPushNotifs] = useState(() => localStorage.getItem('notif_push') !== 'false')
-    const [notifSaved, setNotifSaved] = useState(false)
-
-    // Delete account modal state 
+    // Delete account modal state
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [deletePassword, setDeletePassword] = useState('')
     const [deleteError, setDeleteError] = useState('')
@@ -401,24 +396,6 @@ export default function Settings()
 
 
     /*
-     * FUNCTION: handleSaveNotifications
-     * DESCRIPTION: Persists the email and push notification toggle states to localStorage.
-     *              Shows a brief confirmation message after saving.
-     */
-    const handleSaveNotifications = () =>
-    {
-
-        // Save the notification preferences to localStorage so they persist across sessions.
-        localStorage.setItem('notif_email', emailNotifs)
-        localStorage.setItem('notif_push', pushNotifs)
-
-        setNotifSaved(true)
-        setTimeout(() => setNotifSaved(false), 2500)
-
-    }
-
-
-    /*
      * FUNCTION: handleLogout
      * DESCRIPTION: Signs the user out via better-auth and redirects to the landing page.
      */
@@ -673,76 +650,6 @@ export default function Settings()
                         </Button>
 
                     </Form>
-
-                </SettingsSection>
-
-
-
-                {/* Notification preferences */}
-                <SettingsSection icon={<BsBell size={18} />} title="Notifications">
-
-                    <Form.Group className="mb-3 d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <div className="fw-medium" style={{ fontSize: '0.95rem' }}>
-                                Email notifications
-                            </div>
-
-                            <div className="text-muted" style={{ fontSize: '0.82rem' }}>
-                                Receive watering reminders by email
-                            </div>
-
-                        </div>
-
-                        <Form.Check
-                            type="switch"
-                            id="email-notifs"
-                            checked={emailNotifs}
-                            onChange={(e) => setEmailNotifs(e.target.checked)}
-                            className="settings-switch"
-                        />
-
-                    </Form.Group>
-
-                    <hr className="my-3" />
-
-
-                    <Form.Group className="mb-4 d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <div className="fw-medium" style={{ fontSize: '0.95rem' }}>
-                                Push notifications
-                            </div>
-
-                            <div className="text-muted" style={{ fontSize: '0.82rem' }}>
-                                In-app alerts when plants need attention
-                            </div>
-
-                        </div>
-
-                        <Form.Check
-                            type="switch"
-                            id="push-notifs"
-                            checked={pushNotifs}
-                            onChange={(e) => setPushNotifs(e.target.checked)}
-                            className="settings-switch"
-                        />
-
-                    </Form.Group>
-
-                    {notifSaved && (<Alert variant="success" className="py-2 mb-3">Preferences saved</Alert>)}
-
-                    <Button
-
-                        variant="success"
-                        onClick={handleSaveNotifications}
-                        className="settings-save-btn"
-                    >
-                        Save preferences
-
-                    </Button>
 
                 </SettingsSection>
 

@@ -78,7 +78,10 @@ export default function Calendar() {
     function getEventsForDay(day) {
         if (!calendarData) return []
 
-        return calendarData.data.events.filter(event => event.day === day)
+        return calendarData.data.events.filter(event => {
+            const eventDate = new Date(event.dueDate)
+            return eventDate.getDate() === day
+        })
     }
 
     return (
@@ -125,12 +128,12 @@ export default function Calendar() {
                         <div key={weekIndex} className='calendar-row'>
                             {week.map((day, dayIndex) => (
                                 <div key={dayIndex} className='calendar-cell'>
-                                    {day}
+                                    <div className='calendar-day-number'>{day}</div>
 
                                     {day !== '' &&
                                         getEventsForDay(day).map((event, index) => (
-                                            <div key={index}>
-                                                {event.plantName}
+                                            <div key={index} className='calendar-event'>
+                                                {event.nickname}
                                             </div>
                                         ))}
                                 </div>

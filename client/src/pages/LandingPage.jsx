@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom'
 import { Container, Button, Row, Col } from 'react-bootstrap'
 import FeatureCard from '../Components/FeatureCard'
 import { authClient } from '../lib/auth'
-import heroBg from '../assets/heroSection.jpeg'
-import trackImg from '../assets/track.jpeg'
-import careImg from '../assets/care.jpeg'
-import calendarImg from '../assets/calendar.jpeg'
+import heroBg from '../assets/heroSection.jpg'
+import trackImg from '../assets/track.jpg'
+import careImg from '../assets/care.jpg'
+import calendarImg from '../assets/calendar.jpg'
 
 function LandingPage() {
     const { data: session } = authClient.useSession()

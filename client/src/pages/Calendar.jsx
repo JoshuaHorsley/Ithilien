@@ -127,12 +127,19 @@ export default function Calendar() {
                     {weeks.map((week, weekIndex) => (
                         <div key={weekIndex} className='calendar-row'>
                             {week.map((day, dayIndex) => (
-                                <div key={dayIndex} className='calendar-cell'>
+                                <div
+                                    key={dayIndex}
+                                    className={`calendar-cell ${
+                                        day !== '' && getEventsForDay(day).length > 0
+                                            ? `calendar-cell-${getEventsForDay(day)[0].status}`
+                                            : ''
+                                    }`}
+                                >
                                     <div className='calendar-day-number'>{day}</div>
 
                                     {day !== '' &&
                                         getEventsForDay(day).map((event, index) => (
-                                            <div key={index} className='calendar-event'>
+                                            <div key={index} className={`calendar-event ${event.status}`}>
                                                 {event.nickname}
                                             </div>
                                         ))}

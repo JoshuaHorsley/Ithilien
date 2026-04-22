@@ -76,6 +76,18 @@
     justify-content: flex-start;
 }
 
+.calendar-cell-upcoming {
+    background-color: #e3f2ff;
+}
+
+.calendar-cell-completed {
+    background-color: #e6f7e6;
+}
+
+.calendar-cell-overdue {
+    background-color: #ffe5e5;
+}
+
 .calendar-day-number {
     font-weight: 600;
     margin-bottom: 4px;
@@ -84,6 +96,22 @@
 .calendar-event {
     font-size: 14px;
     line-height: 1.2;
+    padding: 2px 6px;
+    margin-top: 4px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.calendar-event.upcoming {
+    background-color: #9fd3ff;
+}
+
+.calendar-event.completed {
+    background-color: #b7efb7;
+}
+
+.calendar-event.overdue {
+    background-color: #ff6b6b;
 }
 
 .calendar-legend {

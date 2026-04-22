@@ -1,11 +1,12 @@
+import 'dotenv/config'
+
+
 import express from 'express'
 import type { Request, Response } from 'express'
 
 import { auth } from './lib/auth.js'
 import { toNodeHandler } from 'better-auth/node'
-import { PrismaClient } from '@prisma/client'
 
-import dotenv from 'dotenv'
 import cors from 'cors'
 
 import { router as speciesRouter } from './routes/trefleApi/species.js'
@@ -14,14 +15,20 @@ import { router as calendarRouter } from './routes/calendar.js'
 import { router as remindersRouter } from './routes/reminders.js'
 import { router as userRouter } from './routes/user.js'
 import { router as imagesRouter } from './routes/images/images.js'
-
-dotenv.config()
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient() //This wasn't doing anything, so I commented it out.
 const app = express()
 const PORT = process.env.PORT || 3003
 
+import path from 'path'
+app.use(express.static(path.join(__dirname, '../../client/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+})
+
+
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.CLIENT_URL,
   credentials: true,
 }))
 

@@ -62,6 +62,7 @@
     padding: 8px;
     background-color: #fff;
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
 }
@@ -107,4 +108,39 @@
 
 .calendar-legend-color.overdue {
     background-color: #ff6b6b;
+}
+
+
+.calendar-day-number {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.calendar-event {
+    font-size: 11px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    cursor: default;
+}
+
+.calendar-event-upcoming {
+    background-color: #9fd3ff;
+    color: #003d6b;
+}
+
+.calendar-event-completed {
+    background-color: #b7efb7;
+    color: #1a4d1a;
+}
+
+.calendar-event-overdue {
+    background-color: #ff6b6b;
+    color: #5c0000;
 }

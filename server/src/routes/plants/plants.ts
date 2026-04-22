@@ -178,6 +178,7 @@ router.post('/', async (req: Request, res: Response) => {
         light: mapLight(species.growth?.light),
         humidity: mapHumidity(species.growth?.atmospheric_humidity),
         watering: mapWatering(species.growth?.minimum_precipitation, species.growth?.maximum_precipitation),
+        wateringDays: 7,
         growthRate: species.specifications?.growth_rate || null,
         toxicity: species.specifications?.toxicity || null,
         edible: species.edible || false,

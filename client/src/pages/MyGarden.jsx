@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import { authClient } from '../lib/auth'
-import PlantCard from '../components/PlantCard'
-import AddPlantCard from '../components/AddPlantCard'
-import AddPlantModal from '../components/AddPlantModal' 
+import PlantCard from '../Components/PlantCard'
+import AddPlantCard from '../Components/AddPlantCard'
+import AddPlantModal from '../Components/AddPlantModal' 
 
 export default function MyGarden() {
   const [showModal, setShowModal] = useState(false)

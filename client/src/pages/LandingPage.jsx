@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Container, Button, Row, Col } from 'react-bootstrap'
-import FeatureCard from '../components/FeatureCard'
+import FeatureCard from '../Components/FeatureCard'
 import { authClient } from '../lib/auth'
 import heroBg from '../assets/heroSection.jpeg'
 import trackImg from '../assets/track.jpeg'

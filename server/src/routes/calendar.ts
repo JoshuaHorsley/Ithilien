@@ -90,7 +90,7 @@ router.get('/', async (req: Request, res: Response) => {
             if (!plant.wateringDays || plant.wateringDays < 1) continue
 
             const interval = plant.wateringDays
-            const seedDate = plant.lastWatered ?? plant.createdAt
+            const seedDate = plant.createdAt
 
             let dueDate = addDays(new Date(seedDate), interval)
 

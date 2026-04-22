@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "generate": "prisma generate",
-    "build": "tsc",
+    "build": "npm run generate &&tsc",
     "start": "npm run generate && node dist/index.js",
     "dev": "npm run generate && tsx watch src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"

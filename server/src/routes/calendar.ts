@@ -101,7 +101,7 @@ router.get('/', async (req: Request, res: Response) => {
             while (isSameOrBefore(dueDate, monthEnd)) {
                 const nextDueDate = addDays(dueDate, interval)
 
-                const completedLog = plant.careLogs.find((log) => {
+                const completedLog = plant.careLogs.find((log: any) => {
                     const logDate = new Date(log.date)
                     return logDate >= dueDate && logDate < nextDueDate
                 })

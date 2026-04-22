@@ -128,7 +128,7 @@ router.get('/', async (req: Request, res: Response) => {
         })
 
         // Sort so the most overdue plants appear first, no-schedule plants at the end
-        plantsWithUrgency.sort((a, b) => {
+        plantsWithUrgency.sort((a: any, b: any) => {
             const scoreA = getUrgencyScore(a.daysUntilWatering)
             const scoreB = getUrgencyScore(b.daysUntilWatering)
             return scoreA - scoreB
@@ -164,7 +164,7 @@ router.post('/', async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Species not found on Trefle' })
     }
 
-    const plant = await prisma.plant.create({
+    const plant: any = await prisma.plant.create({
       data: {
         nickname,
         userId: user.id,
@@ -178,7 +178,6 @@ router.post('/', async (req: Request, res: Response) => {
         light: mapLight(species.growth?.light),
         humidity: mapHumidity(species.growth?.atmospheric_humidity),
         watering: mapWatering(species.growth?.minimum_precipitation, species.growth?.maximum_precipitation),
-        wateringDays: 7,
         growthRate: species.specifications?.growth_rate || null,
         toxicity: species.specifications?.toxicity || null,
         edible: species.edible || false,

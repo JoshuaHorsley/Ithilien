@@ -10,7 +10,7 @@ export default function Calendar() {
     const [calendarData, setCalendarData] = useState(null)
 
     useEffect(() => {
-        fetch(`http://localhost:3003/api/calendar?year=${year}&month=${month}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/calendar?year=${year}&month=${month}`, {
             credentials: 'include'
         })
             .then(res => res.json())

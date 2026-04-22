@@ -19,7 +19,7 @@ const auth = betterAuth({
   session: {
     expiresIn: 60 * 60 * 24, // 24 hours, per DDD spec
   },
-  trustedOrigins: ['http://localhost:5173'],
+  trustedOrigins: [process.env.CLIENT_URL || 'http://localhost:5173'],
 })
 
 export { auth, prisma }

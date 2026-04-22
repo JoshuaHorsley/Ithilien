@@ -8,7 +8,7 @@
 import { Card, Dropdown, Badge } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 
-const API = 'http://localhost:3003/api'
+const API = import.meta.env.VITE_API_URL
 
 /*
  * FUNCTION: getCareStatus

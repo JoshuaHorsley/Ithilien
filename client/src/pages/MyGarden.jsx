@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import { authClient } from '../lib/auth'
 import PlantCard from '../components/PlantCard'
 import AddPlantCard from '../components/AddPlantCard'
-import AddPlantModal from '../components/AddPlantModal'
+import AddPlantModal from '../components/AddPlantModal' 
 
 export default function MyGarden() {
   const [showModal, setShowModal] = useState(false)

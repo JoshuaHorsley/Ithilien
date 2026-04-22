@@ -75,6 +75,12 @@ export default function Calendar() {
         weeks.push(allCells.slice(i, i + 7))
     }
 
+    function getEventsForDay(day) {
+        if (!calendarData) return []
+
+        return calendarData.data.events.filter(event => event.day === day)
+    }
+
     return (
         <Container fluid className='calendar-page'>
             <div className='calendar-header'>
@@ -120,6 +126,13 @@ export default function Calendar() {
                             {week.map((day, dayIndex) => (
                                 <div key={dayIndex} className='calendar-cell'>
                                     {day}
+
+                                    {day !== '' &&
+                                        getEventsForDay(day).map((event, index) => (
+                                            <div key={index}>
+                                                {event.plantName}
+                                            </div>
+                                        ))}
                                 </div>
                             ))}
                         </div>

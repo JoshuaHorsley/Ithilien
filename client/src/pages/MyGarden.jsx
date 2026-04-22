@@ -14,7 +14,7 @@ export default function MyGarden() {
   const fetchPlants = async () => {
     if (!session?.user?.id) return
     try {
-      const res = await fetch(`http://localhost:3003/api/plants`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/plants`, {
         credentials: 'include',
       })
       const json = await res.json()
@@ -40,15 +40,19 @@ export default function MyGarden() {
       <Row className="g-4">
         {plants.map((plant) => (
           <Col md={4} key={plant.id}>
-            <PlantCard
-              plant={{
-                id: plant.id,
-                nickname: plant.nickname,
-                species: plant.speciesName,
-                image: plant.imageUrl || 'https://placehold.co/400x300/f0f7f0/2e7d32?text=No+Photo',
-                daysUntilWatering: plant.daysUntilWatering,
-              }}
-              onAction={fetchPlants}
+            <PlantCard plant={{
+              id: plant.id,
+              nickname: plant.nickname,
+              species: plant.speciesName,
+              //If the plant has an image, use the image API to get the image.
+              //Otherwise, use the imageUrl from the Trefle API.
+              image: plant.plantImageId
+                ? `${import.meta.env.VITE_API_URL}/api/images/${plant.plantImageId}`
+                : plant.imageUrl || 'https://placehold.co/400x300/f0f7f0/2e7d32?text=No+Photo',
+              daysUntilWatering: plant.daysUntilWatering,
+              
+            }}
+            onAction={fetchPlants}
             />
           </Col>
         ))}

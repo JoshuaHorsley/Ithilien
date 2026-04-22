@@ -43,7 +43,7 @@ function App()
             {
 
                 const res = await fetch(
-                    `http://localhost:3003/api/reminders`,
+                    `${import.meta.env.VITE_API_URL}/api/reminders?userId=${session.user.id}`,
                     { credentials: 'include' }
 
                 )

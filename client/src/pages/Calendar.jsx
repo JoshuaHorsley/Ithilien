@@ -47,33 +47,34 @@ export default function Calendar() {
     const daysInMonth = new Date(year, month, 0).getDate()
 
     const days = []
-
     for (let i = 1; i <= daysInMonth; i++) {
         days.push(i)
     }
 
     const firstDayOfMonth = new Date(year, month - 1, 1).getDay()
 
-    const emptyCells = []
+    const allCells = []
 
     for (let i = 0; i < firstDayOfMonth; i++) {
-        emptyCells.push(
-            <div key={`start-empty-${i}`} className='calendar-cell'></div>
-        )
+        allCells.push('')
     }
 
-    const totalCells = firstDayOfMonth + days.length
-    const totalCalendarCells = Math.ceil(totalCells / 7) * 7
-    const remainingCells = totalCalendarCells - totalCells
-
-    const endEmptyCells = []
-
-    for (let i = 0; i < remainingCells; i++) {
-        endEmptyCells.push(
-            <div key={`end-empty-${i}`} className='calendar-cell'></div>
-        )
+    for (let i = 0; i < days.length; i++) {
+        allCells.push(days[i])
     }
-    
+
+    const totalCalendarCells = Math.ceil(allCells.length / 7) * 7
+
+    while (allCells.length < totalCalendarCells) {
+        allCells.push('')
+    }
+
+    const weeks = []
+
+    for (let i = 0; i < allCells.length; i += 7) {
+        weeks.push(allCells.slice(i, i + 7))
+    }
+
     return (
         <Container fluid className='calendar-page'>
             <div className='calendar-header'>
@@ -114,17 +115,15 @@ export default function Calendar() {
                         <div>Sat</div>
                     </div>
 
-                    <div className='calendar-row'>
-                        {emptyCells}
-
-                        {days.map(day => (
-                            <div key={day} className='calendar-cell'>
-                                {day}
-                            </div>
-                        ))}
-
-                        {endEmptyCells}
-                    </div>
+                    {weeks.map((week, weekIndex) => (
+                        <div key={weekIndex} className='calendar-row'>
+                            {week.map((day, dayIndex) => (
+                                <div key={dayIndex} className='calendar-cell'>
+                                    {day}
+                                </div>
+                            ))}
+                        </div>
+                    ))}
                 </div>
 
                 <div className='calendar-legend'>

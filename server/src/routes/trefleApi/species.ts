@@ -96,6 +96,7 @@ router.get('/:slug', async (req: Request, res: Response<SpeciesDetailsResponseDa
       edible: plant.edible || false,
       flowerColor: plant.flower?.color || [],
       foliageColor: plant.foliage?.color || [],
+      plantImageId: null,
     }
     
 

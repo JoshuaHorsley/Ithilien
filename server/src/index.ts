@@ -9,6 +9,9 @@ import { toNodeHandler } from 'better-auth/node'
 
 import cors from 'cors'
 
+import path from 'path'
+import { fileURLToPath } from 'url'
+
 import { router as speciesRouter } from './routes/trefleApi/species.js'
 import { router as plantsRouter } from './routes/plants/plants.js'
 import { router as calendarRouter } from './routes/calendar.js'
@@ -19,11 +22,15 @@ import { router as imagesRouter } from './routes/images/images.js'
 const app = express()
 const PORT = process.env.PORT || 3003
 
-import path from 'path'
-app.use(express.static(path.join(__dirname, '../../client/dist')));
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-app.get('*', (_, res) => {
-  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+app.use(express.static(path.join(__dirname, '../../client/dist')))
+
+//Express 5 doesn't accept '*' as a path pattern; use a regex catch-all.
+//Also avoid intercepting API routes.
+app.get(/^(?!\/api).*/, (_, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'))
 })
 
 

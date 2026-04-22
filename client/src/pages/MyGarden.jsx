@@ -50,8 +50,10 @@ export default function MyGarden() {
                 ? `${import.meta.env.VITE_API_URL}/api/images/${plant.plantImageId}`
                 : plant.imageUrl || 'https://placehold.co/400x300/f0f7f0/2e7d32?text=No+Photo',
               daysUntilWatering: plant.daysUntilWatering,
-              onAction={fetchPlants}
-            }} />
+              
+            }}
+            onAction={fetchPlants}
+            />
           </Col>
         ))}
         <Col md={4}>

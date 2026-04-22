@@ -3,7 +3,7 @@ import { BsEye, BsEyeSlash } from 'react-icons/bs'
 import { Container, Card, Tab, Nav, Form, Button } from 'react-bootstrap'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { authClient } from '../lib/auth'
-import authBg from '../assets/AuthBg.jpeg'
+import authBg from '../assets/AuthBg.jpg'
 
 export default function AuthPage(){
     const location = useLocation()

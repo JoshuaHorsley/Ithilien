@@ -43,7 +43,7 @@ function App()
             {
 
                 const res = await fetch(
-                    `${import.meta.env.API_URL}/reminders?userId=${session.user.id}`,
+                    `${import.meta.env.VITE_API_URL}/api/reminders?userId=${session.user.id}`,
                     { credentials: 'include' }
 
                 )

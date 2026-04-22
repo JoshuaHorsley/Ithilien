@@ -23,7 +23,7 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
     const timer = setTimeout(async () => {
       setSearching(true)
       try {
-        const res = await fetch(`${import.meta.env.API_URL}/api/species/search?q=${encodeURIComponent(query)}`)
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/species/search?q=${encodeURIComponent(query)}`)
         const json = await res.json()
         setResults(json.data || [])
       } catch (err) {
@@ -70,7 +70,7 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
       if(imageFile) {
         const formData = new FormData();
         formData.append('image', imageFile);
-        const imgRes = await fetch(`${import.meta.env.API_URL}/api/images`, {
+        const imgRes = await fetch(`${import.meta.env.VITE_API_URL}/api/images`, {
           method: 'POST',
           credentials: 'include',
           body: formData,
@@ -87,7 +87,7 @@ export default function AddPlantModal({ show, onHide, onPlantAdded }) {
 
 
 
-      const res = await fetch(`${import.meta.env.API_URL}/api/plants`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/plants`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

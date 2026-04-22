@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { Container, Button, Card, Form, Modal, Spinner } from 'react-bootstrap'
 import './PlantProfile.css'
 
-const API = `${import.meta.env.API_URL}/api`
+const API = `${import.meta.env.VITE_API_URL}/api`
 
 export default function PlantProfile() {
   const { id } = useParams()

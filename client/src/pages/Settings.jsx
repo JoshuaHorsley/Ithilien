@@ -148,7 +148,7 @@ export default function Settings()
             try {
 
                 // We need to include credentials in order for the cookie to be sent and the server to identify the user
-                const res = await fetch(`${import.meta.env.API_URL}/api/user/profile`,
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/profile`,
                 {
 
                     credentials: 'include',
@@ -254,7 +254,7 @@ export default function Settings()
         try {
 
             // include credentials in order for the cookie to be sent and the server to identify the user
-            const res = await fetch(`${import.meta.env.API_URL}/api/user/profile`,
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/profile`,
             {
 
                 method: 'PUT',
@@ -354,7 +354,7 @@ export default function Settings()
         {
 
             // include credentials in order for the cookie to be sent and the server to identify the user, and send the current and new password in the body
-            const res = await fetch(`${import.meta.env.API_URL}/api/user/profile`,
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/profile`,
             {
 
                 method: 'PUT',
@@ -471,7 +471,7 @@ export default function Settings()
         try {
 
             // include credentials in order for the cookie to be sent and the server to identify the user, and send the password in the body for confirmation
-            const res = await fetch(`${import.meta.env.API_URL}/api/user/account`,
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/account`,
             {
 
                 method: 'DELETE',

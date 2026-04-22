@@ -60,7 +60,7 @@ export default function PlantCard({ plant, onAction }) {
 
   const handleWater = async () => {
     try {
-      await fetch(`${API}/plants/${plant.id}/water`, { method: 'POST', credentials: 'include' })
+      await fetch(`${API}/api/plants/${plant.id}/water`, { method: 'POST', credentials: 'include' })
       if (onAction) onAction()
     } catch (err) {
       console.error('Water error:', err)
@@ -74,7 +74,7 @@ export default function PlantCard({ plant, onAction }) {
   const handleDelete = async () => {
     if (!confirm(`Delete "${plant.nickname}"? This cannot be undone.`)) return
     try {
-      await fetch(`${API}/plants/${plant.id}`, { method: 'DELETE', credentials: 'include' })
+      await fetch(`${API}/api/plants/${plant.id}`, { method: 'DELETE', credentials: 'include' })
       if (onAction) onAction()
     } catch (err) {
       console.error('Delete error:', err)
